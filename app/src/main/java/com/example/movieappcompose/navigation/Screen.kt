@@ -1,6 +1,7 @@
-package com.example.movieappcompose
+package com.example.movieappcompose.navigation
 
-sealed class Screen(val route: String) {
+sealed class Screen(val route: String = "entry_screen") {
+    object Root: Screen("root")
     object AuthScreen: Screen("auth_screen") {
         object LoginScreen : Screen("login_screen")
         object SignUpScreen : Screen("sign_up_screen")

@@ -17,7 +17,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.movieappcompose.models.Movie
+import com.example.movieappcompose.movieList.viewModel.MovieViewModel
+import androidx.compose.runtime.*
 
 @Composable
 @Preview(showBackground = true)
@@ -27,6 +30,10 @@ fun MoviePreview() {
 
 @Composable
 fun MainMovieList(onClick: (id: String) -> Unit) {
+    val viewModel = viewModel<MovieViewModel>()
+
+    val movies = viewModel.movieList()
+
     MovieList(onClick = onClick, isFavouriteList = false)
 }
 
@@ -37,13 +44,14 @@ fun FavouriteMovieList(onClick: (id: String) -> Unit) {
 
 @Composable
 fun MovieList(
-    movies: List<Movie> = List(100) {Movie()},
     onClick: (id: String) -> Unit,
     isFavouriteList: Boolean
 ) {
+
+    val movies = List(100) {it}
     LazyColumn{
         items(items = movies) {movie ->
-            MovieCard(movie, onClick, isFavouriteList)
+//            MovieCard(movie, onClick, isFavouriteList)
         }
     }
 }
@@ -97,7 +105,7 @@ fun MovieCardInfo(movie: Movie, isFavouriteList: Boolean, onClick: (id: String) 
             Column {
                 CustomIconText(imageVector = Icons.Rounded.StarRate, text = movie.rating.toString())
                 CustomIconText(imageVector = Icons.Rounded.Language, text = movie.language)
-                CustomIconText(imageVector = Icons.Rounded.CalendarToday, text = movie.dateRelease)
+                CustomIconText(imageVector = Icons.Rounded.CalendarToday, text = movie.releaseDate)
             }
             IconButton(
                 onClick = { onClick.invoke(movie.title) },

@@ -1,9 +1,8 @@
-package com.example.movieappcompose
+package com.example.movieappcompose.navigation
 
 import androidx.compose.material.BottomNavigation
 import androidx.compose.material.BottomNavigationItem
 import androidx.compose.material.Icon
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -21,7 +20,7 @@ fun MainBottomBarNav(
     BottomNavigation {
         items.forEach { screen ->
             BottomNavigationItem(
-                icon = { Icon(screen.icon, "")},
+                icon = { Icon(screen.icon, screen.title)},
                 selected = currentDestination?.hierarchy?.any {
                     it.route == screen.route } == true,
                 onClick = { navController.navigate(screen.route) })

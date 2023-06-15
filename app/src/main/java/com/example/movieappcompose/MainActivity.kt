@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
-import com.example.movieappcompose.graphs.RootNavGraph
+import com.example.movieappcompose.navigation.graphs.RootNavGraph
 import com.example.movieappcompose.ui.theme.MovieAppComposeTheme
 
 class MainActivity : ComponentActivity() {
@@ -31,11 +31,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MovieAppComposeTheme {
-//                MyApp(modifier = Modifier.fillMaxSize())
-//                MovieList()
-//                LoginPage()
                 val navController = rememberNavController()
-//                Navigation(navController)
+
                 RootNavGraph(navController = navController)
             }
 

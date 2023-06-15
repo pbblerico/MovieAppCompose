@@ -1,4 +1,4 @@
-package com.example.movieappcompose
+package com.example.movieappcompose.navigation
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Favorite

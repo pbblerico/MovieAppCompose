@@ -6,9 +6,9 @@ import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.example.movieappcompose.BottomBarScreen
-import com.example.movieappcompose.MainBottomBarNav
-import com.example.movieappcompose.graphs.MainNavGraph
+import com.example.movieappcompose.navigation.BottomBarScreen
+import com.example.movieappcompose.navigation.MainBottomBarNav
+import com.example.movieappcompose.navigation.graphs.MainNavGraph
 
 @Composable
 fun MainScreen() {
@@ -20,7 +20,7 @@ fun MainScreen() {
     )
 
     Scaffold(
-        bottomBar = { MainBottomBarNav(navController = navController, items = bottomNavItems)},
+        bottomBar = { MainBottomBarNav(navController = navController, items = bottomNavItems) },
     ) {
         Column(modifier = Modifier.padding(it)) {
             MainNavGraph(navController = navController)

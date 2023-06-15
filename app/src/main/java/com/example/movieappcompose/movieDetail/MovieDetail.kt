@@ -59,7 +59,7 @@ fun MovieDetail(movie: Movie) {
                     horizontalArrangement = Arrangement.End
                 ) {
                     Text("date release:")
-                    Text(movie.dateRelease, modifier = Modifier.padding(horizontal = 10.dp))
+                    Text(movie.releaseDate, modifier = Modifier.padding(horizontal = 10.dp))
                 }
                 Row(
                     modifier = Modifier.padding(vertical = 5.dp).fillMaxWidth(),
