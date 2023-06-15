@@ -1,0 +1,98 @@
+{
+  "project_info": {
+    "project_number": "1092080917359",
+    "firebase_url": "https://movie-app-7183b-default-rtdb.firebaseio.com",
+    "project_id": "movie-app-7183b",
+    "storage_bucket": "movie-app-7183b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092080917359:android:d4471d231e972775be669a",
+        "android_client_info": {
+          "package_name": "com.examle.movieapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1092080917359-7kko4hbjnl66ke39a503bdp9vs19dnqq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFgWxB_Zu5F7bb3gah663cQwhMfT1-mWo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092080917359-7kko4hbjnl66ke39a503bdp9vs19dnqq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092080917359:android:043c3542ad452e24be669a",
+        "android_client_info": {
+          "package_name": "com.example.movieapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1092080917359-7kko4hbjnl66ke39a503bdp9vs19dnqq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFgWxB_Zu5F7bb3gah663cQwhMfT1-mWo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092080917359-7kko4hbjnl66ke39a503bdp9vs19dnqq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1092080917359:android:fe986b5f04947197be669a",
+        "android_client_info": {
+          "package_name": "com.example.movieappcompose"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1092080917359-7kko4hbjnl66ke39a503bdp9vs19dnqq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFgWxB_Zu5F7bb3gah663cQwhMfT1-mWo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1092080917359-7kko4hbjnl66ke39a503bdp9vs19dnqq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,6 +1,7 @@
 package com.example.movieappcompose
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,26 +22,40 @@ import com.example.movieappcompose.models.Movie
 @Composable
 @Preview(showBackground = true)
 fun MoviePreview() {
-    MovieList()
+//    MovieList()
 }
 
+@Composable
+fun MainMovieList(onClick: (id: String) -> Unit) {
+    MovieList(onClick = onClick, isFavouriteList = false)
+}
 
 @Composable
-fun MovieList(movies: List<Movie> = List(100) {Movie()}) {
+fun FavouriteMovieList(onClick: (id: String) -> Unit) {
+    MovieList(onClick = onClick, isFavouriteList = true)
+}
+
+@Composable
+fun MovieList(
+    movies: List<Movie> = List(100) {Movie()},
+    onClick: (id: String) -> Unit,
+    isFavouriteList: Boolean
+) {
     LazyColumn{
         items(items = movies) {movie ->
-            Movie(movie)
+            MovieCard(movie, onClick, isFavouriteList)
         }
     }
 }
 
 @Composable
-fun Movie(movie: Movie) {
+fun MovieCard(movie: Movie, onClick: (id: String) -> Unit, isFavouriteList: Boolean) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(180.dp)
-            .padding(5.dp),
+            .padding(5.dp)
+            .clickable { onClick.invoke(movie.title) },
         shape = RoundedCornerShape(8.dp),
         backgroundColor = MaterialTheme.colors.primary
             ) {
@@ -56,14 +71,13 @@ fun Movie(movie: Movie) {
                     .height(160.dp)
             )
             Spacer(modifier = Modifier.width(20.dp))
-            MovieInfo(movie = movie, false)
-
+            MovieCardInfo(movie = movie, isFavouriteList, onClick)
         }
     }
 }
 
 @Composable
-fun MovieInfo(movie: Movie, boolean: Boolean) {
+fun MovieCardInfo(movie: Movie, isFavouriteList: Boolean, onClick: (id: String) -> Unit) {
     Column(
         modifier = Modifier.fillMaxSize()
     ){
@@ -81,16 +95,16 @@ fun MovieInfo(movie: Movie, boolean: Boolean) {
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Column {
-                iconAndText(imageVector = Icons.Rounded.StarRate, text = movie.rating.toString())
-                iconAndText(imageVector = Icons.Rounded.Language, text = movie.language)
-                iconAndText(imageVector = Icons.Rounded.CalendarToday, text = movie.dateRelease)
+                CustomIconText(imageVector = Icons.Rounded.StarRate, text = movie.rating.toString())
+                CustomIconText(imageVector = Icons.Rounded.Language, text = movie.language)
+                CustomIconText(imageVector = Icons.Rounded.CalendarToday, text = movie.dateRelease)
             }
             IconButton(
-                onClick = { /*TODO*/ },
+                onClick = { onClick.invoke(movie.title) },
                 modifier = Modifier.align(Alignment.Bottom)
             ) {
                 Icon(
-                    imageVector = if (boolean) Icons.Rounded.Favorite else Icons.Rounded.Delete,
+                    imageVector = if (isFavouriteList) Icons.Rounded.Delete else Icons.Rounded.Favorite,
                     contentDescription = "",
                     modifier = Modifier.size(30.dp),
                     tint = Color.Red
@@ -100,8 +114,9 @@ fun MovieInfo(movie: Movie, boolean: Boolean) {
     }
 }
 
+
 @Composable
-fun iconAndText(imageVector: ImageVector, text: String) {
+fun CustomIconText(imageVector: ImageVector, text: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(vertical = 5.dp)
