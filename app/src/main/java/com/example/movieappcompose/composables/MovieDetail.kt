@@ -1,4 +1,4 @@
-package com.example.movieappcompose
+package com.example.movieappcompose.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -15,11 +15,13 @@ import androidx.compose.ui.unit.dp
 import com.example.movieappcompose.models.Movie
 import com.example.movieappcompose.ui.theme.base
 
+
 @Composable
 fun MovieDetail(movie: Movie) {
     Column(
         modifier = Modifier
-            .fillMaxSize().background(base)
+            .fillMaxSize()
+            .background(base)
     ) {
 
         Column(
@@ -43,26 +45,32 @@ fun MovieDetail(movie: Movie) {
             modifier = Modifier.padding(horizontal = 16.dp)
         ) {
             Text(
-                text = "Movie Info:", 
+                text = "Movie Info:",
                 style = MaterialTheme.typography.h6,
                 modifier = Modifier.padding(vertical = 5.dp))
             Column{
                 Row(
-                    modifier = Modifier.padding(vertical = 5.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(vertical = 5.dp)
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
                     Text("rating:")
                     Text(movie.rating.toString(), modifier = Modifier.padding(horizontal = 10.dp))
                 }
                 Row(
-                    modifier = Modifier.padding(vertical = 5.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(vertical = 5.dp)
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
                     Text("date release:")
                     Text(movie.releaseDate, modifier = Modifier.padding(horizontal = 10.dp))
                 }
                 Row(
-                    modifier = Modifier.padding(vertical = 5.dp).fillMaxWidth(),
+                    modifier = Modifier
+                        .padding(vertical = 5.dp)
+                        .fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
                     Text("language:")
@@ -79,8 +87,14 @@ fun MovieDetail(movie: Movie) {
 
 }
 
+
+@Composable
+fun MovieDetailPage(movie: Movie = Movie()) {
+    Text("heloo")
+}
+//
 @Preview(showBackground = true)
 @Composable
-fun PreviewMovieDetail() {
-    MovieDetail(Movie())
+fun PreviewDetail() {
+    MovieDetailPage()
 }

@@ -1,4 +1,4 @@
-package com.example.movieappcompose
+package com.example.movieappcompose.composables
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -33,69 +33,6 @@ import com.example.movieappcompose.composables.CustomTextField
 import com.example.movieappcompose.ui.theme.Teal200
 import com.example.movieappcompose.ui.theme.base
 import com.example.movieappcompose.ui.theme.dark
-
-//@Composable
-//fun InputFields(label: String = "", imageVector: ImageVector = Icons.Rounded.Password) {
-//    var text by remember {
-//        mutableStateOf("")
-//    }
-//
-//    TextField(
-//        value = text,
-//        onValueChange = { text = it },
-//        label = { Text(text = label) },
-//        singleLine = true,
-//        leadingIcon = { Icon(imageVector = imageVector, "", tint = base) },
-//        modifier = Modifier
-//            .padding(5.dp)
-//            .border(
-//                BorderStroke(
-//                    width = 4.dp,
-//                    brush = Brush.horizontalGradient(listOf(Teal200, base))
-//                ), shape = RoundedCornerShape(8.dp)
-//            )
-//            .fillMaxWidth(),
-//        trailingIcon = {
-//            IconButton(onClick = { text = "" }) {
-//                Icon(imageVector = Icons.Rounded.Cancel, "delete", tint = dark)
-//            }
-//        },
-//    )
-//}
-//
-//@Composable
-//fun PasswordField() {
-//    var showPassword by rememberSaveable { mutableStateOf(false) }
-//    var password by rememberSaveable { mutableStateOf("") }
-//
-//    TextField(
-//        value = password,
-//        onValueChange = { password = it },
-//        label = { Text(text = "Password") },
-//        singleLine = true,
-//        leadingIcon = { Icon(imageVector = Icons.Rounded.Password, "", tint = base) },
-//        modifier = Modifier
-//            .padding(5.dp)
-//            .border(
-//                BorderStroke(
-//                    width = 4.dp,
-//                    brush = Brush.horizontalGradient(listOf(Teal200, base))
-//                ), shape = RoundedCornerShape(8.dp)
-//            )
-//            .fillMaxWidth(),
-//        visualTransformation = if (showPassword) {
-//            VisualTransformation.None
-//        } else {
-//            PasswordVisualTransformation()
-//        },
-//        trailingIcon = {
-//            val icon = if (showPassword) Icons.Filled.Visibility else Icons.Filled.VisibilityOff
-//            IconButton(onClick = { showPassword = !showPassword }) {
-//                Icon(imageVector = icon, "", tint = dark)
-//            }
-//        },
-//    )
-//}
 
 @Composable
 fun AuthForm() {
