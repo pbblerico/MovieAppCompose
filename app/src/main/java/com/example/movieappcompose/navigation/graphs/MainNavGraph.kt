@@ -4,8 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.movieappcompose.composables.*
-import com.example.movieappcompose.models.Movie
+import com.example.movieappcompose.movieDetail.ui.CollapsingToolbar
 import com.example.movieappcompose.navigation.Screen
 
 @Composable

@@ -3,8 +3,6 @@ package com.example.movieappcompose.composables
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -18,56 +16,55 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.movieappcompose.models.Movie
-import com.example.movieappcompose.movieList.viewModel.MovieViewModelMVI
 
 @Composable
 @Preview(showBackground = true)
 fun MoviePreview() {
-//    MovieList()
+    Text("Hello")
 }
 
-@Composable
-fun MainMovieList(
-    viewModel: MovieViewModelMVI
-) {
-    TODO(
-        "ViewModel"
-    )
+//@Composable
+//fun MainMovieList(
+//    viewModel: MovieViewModelMVI
+//) {
+//    TODO(
+//        "ViewModel"
+//    )
+//
+//    MovieList(
+//        onItemClick = {id -> viewModel.getMovieDetails(id)},
+//        onIconButtonClick = {movie -> viewModel.addToFavourite(movie)},
+//        isFavouriteList = true)
+//}
+//
+//@Composable
+//fun FavouriteMovieList(
+//    viewModel: MovieViewModelMVI
+//    ) {
+//    TODO(
+//        "ViewModel"
+//    )
+//
+//    MovieList(
+//        onItemClick = {id -> viewModel.getMovieDetails(id)},
+//        onIconButtonClick = {movie -> viewModel.removeFromFavourite(movie)},
+//        isFavouriteList = true)
+//}
 
-    MovieList(
-        onItemClick = {id -> viewModel.getMovieDetails(id)},
-        onIconButtonClick = {movie -> viewModel.addToFavourite(movie)},
-        isFavouriteList = true)
-}
-
-@Composable
-fun FavouriteMovieList(
-    viewModel: MovieViewModelMVI
-    ) {
-    TODO(
-        "ViewModel"
-    )
-
-    MovieList(
-        onItemClick = {id -> viewModel.getMovieDetails(id)},
-        onIconButtonClick = {movie -> viewModel.removeFromFavourite(movie)},
-        isFavouriteList = true)
-}
-
-@Composable
-fun MovieList(
-    onItemClick: (id: Long) -> Unit,
-    onIconButtonClick: (movie: Movie) -> Unit,
-    isFavouriteList: Boolean
-) {
-
-    val movies = List(100) {Movie()}
-    LazyColumn{
-        items(items = movies) {movie ->
-            MovieCard(movie, onItemClick, onIconButtonClick, isFavouriteList)
-        }
-    }
-}
+//@Composable
+//fun MovieList(
+//    onItemClick: (id: Long) -> Unit,
+//    onIconButtonClick: (movie: Movie) -> Unit,
+//    isFavouriteList: Boolean
+//) {
+//
+//    val movies = List(100) {Movie()}
+//    LazyColumn{
+//        items(items = movies) {movie ->
+//            MovieCard(movie, onItemClick, onIconButtonClick, isFavouriteList)
+//        }
+//    }
+//}
 
 @Composable
 fun MovieCard(

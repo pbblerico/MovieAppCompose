@@ -1,4 +1,4 @@
-package com.example.movieappcompose.composables
+package com.example.movieappcompose.movieDetail.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -41,7 +41,7 @@ fun PreviewScrollingMovieDetail() {
 }
 
 @Composable
-fun CollapsingToolbar() {
+fun CollapsingToolbar(movie: Movie = Movie()) {
     val headerHeightDp = LocalConfiguration.current.screenHeightDp.dp
     val toolbarHeightDp = 56.dp
 
@@ -53,14 +53,14 @@ fun CollapsingToolbar() {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        Header(scroll, headerHeightPx)
-        Body(scroll)
-        Toolbar(scroll, headerHeightPx, toolbarHeightPx)
+        Header(scroll, headerHeightPx, movie.posterPath)
+        Body(scroll, movie)
+        Toolbar(scroll, headerHeightPx, toolbarHeightPx, movie)
     }
 }
 
 @Composable
-fun Title(movie: Movie = Movie()) {
+fun Title(movie: Movie) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -86,7 +86,7 @@ fun Title(movie: Movie = Movie()) {
 }
 
 @Composable
-fun Toolbar(scroll: ScrollState, headerHeightPx: Float, toolbarHeight: Float, title: String = "Title") {
+fun Toolbar(scroll: ScrollState, headerHeightPx: Float, toolbarHeight: Float, movie: Movie) {
     val toolbarBottom by remember {
         mutableStateOf(headerHeightPx - toolbarHeight - 56)
     }
@@ -102,7 +102,7 @@ fun Toolbar(scroll: ScrollState, headerHeightPx: Float, toolbarHeight: Float, ti
     ) {
 
         TopAppBar(
-            title = {Text(Movie().title, color = Color.White)},
+            title = {Text(movie.title, color = Color.White)},
             modifier = Modifier.background(
                 brush = Brush.horizontalGradient(
                     listOf(Color(0xff026586), Color(0xff032C45))
@@ -161,7 +161,7 @@ fun Overview(movieOverview: String) {
 }
 
 @Composable
-fun Rating(movie: Movie = Movie()) {
+fun Rating(movieRating: Double) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -180,7 +180,7 @@ fun Rating(movie: Movie = Movie()) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = Movie().rating.toString(),
+                text = movieRating.toString(),
                 style = MaterialTheme.typography.h3,
                 color = dark,
                 fontWeight = FontWeight.Bold
@@ -197,7 +197,7 @@ fun Rating(movie: Movie = Movie()) {
 }
 
 @Composable
-fun Body(scroll: ScrollState) {
+fun Body(scroll: ScrollState, movie: Movie) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
@@ -213,21 +213,21 @@ fun Body(scroll: ScrollState) {
                 .padding(bottom = 200.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Title()
+            Title(movie)
 
             Spacer(modifier = Modifier
                 .height(1.dp)
                 .background(light)
                 .fillMaxWidth(0.8f))
 
-            Overview(movieOverview = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.")
+            Overview(movie.overview)
 
             Spacer(modifier = Modifier
                 .height(1.dp)
                 .background(light)
                 .fillMaxWidth(0.8f))
 
-            Rating()
+            Rating(movie.rating)
         }
     }
 }
@@ -253,7 +253,7 @@ fun MovieDetailButtonIcons(action: () -> Unit, imageVector: ImageVector, iconLab
 }
 
 @Composable
-fun Header(scroll: ScrollState, headerHeightPx: Float) {
+fun Header(scroll: ScrollState, headerHeightPx: Float, moviePoster: String) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -265,7 +265,6 @@ fun Header(scroll: ScrollState, headerHeightPx: Float) {
             )
             .graphicsLayer {
                 translationY = -scroll.value.toFloat() / 2f // Parallax effect
-//                alpha = (-1f / headerHeightPx) * scroll.value + 1
             }
     ){
         Box(
@@ -275,7 +274,7 @@ fun Header(scroll: ScrollState, headerHeightPx: Float) {
                 .align(Alignment.Center)
         ) {
             Image(
-                painter = rememberAsyncImagePainter( Constants.POSTER_BASE_URL + Movie().posterPath),
+                painter = rememberAsyncImagePainter( Constants.POSTER_BASE_URL + moviePoster),
                 contentDescription = "",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.fillMaxSize()

@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
-import com.example.movieappcompose.composables.MainMovieList
 import com.example.movieappcompose.movieList.viewModel.MovieViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -18,7 +17,7 @@ class MovieListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
         setContent {
-            MainMovieList(onClick = {})
+//            MainMovieList(viewModel)
         }
     }
 

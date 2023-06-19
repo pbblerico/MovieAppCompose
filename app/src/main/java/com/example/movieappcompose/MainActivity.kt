@@ -23,7 +23,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
-import com.example.movieappcompose.composables.CollapsingToolbar
 import com.example.movieappcompose.navigation.graphs.RootNavGraph
 import com.example.movieappcompose.ui.theme.MovieAppComposeTheme
 
