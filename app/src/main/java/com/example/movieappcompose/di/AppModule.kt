@@ -1,11 +1,17 @@
 package com.example.movieappcompose.di
 
+import com.example.movieappcompose.authorization.repostiroy.AuthRepository
+import com.example.movieappcompose.authorization.repostiroy.AuthRepositoryImpl
+import com.example.movieappcompose.favouriteList.repository.FavoritesRepositoryImpl
+import com.example.movieappcompose.favouriteList.repository.FavouritesRepository
 import com.example.movieappcompose.movieList.repository.MoviePagingSource
 import com.example.movieappcompose.movieList.repository.MovieRepository
 import com.example.movieappcompose.movieList.repository.MovieRepositoryImpl
 import com.example.movieappcompose.movieList.viewModel.MovieViewModel
-import com.example.movieappcompose.retrofit.ApiService
+import com.example.movieappcompose.screens.retrofit.ApiService
 import com.example.movieappcompose.utils.Constants
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -20,9 +26,12 @@ val appModule = module {
     single { okhttpClient(get()) }
     single { retrofit(get()) }
     single { apiService(get()) }
+    single { FirebaseAuth.getInstance() }
+    single { FirebaseDatabase.getInstance() }
     factory { MoviePagingSource(get()) }
-    single<MovieRepository> { return@single MovieRepositoryImpl(get(), get()) }
-
+    single<MovieRepository> { return@single MovieRepositoryImpl(get(), get(), get(), get()) }
+    single<AuthRepository> { return@single AuthRepositoryImpl(get(), get())}
+    single <FavouritesRepository> { return@single FavoritesRepositoryImpl(get(), get())}
 
     viewModel { MovieViewModel(get()) }
 }

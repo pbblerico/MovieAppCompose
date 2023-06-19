@@ -6,32 +6,25 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.*
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.rounded.StarRate
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
@@ -44,8 +37,7 @@ import com.example.movieappcompose.utils.Constants
 @Preview(showBackground = true)
 @Composable
 fun PreviewScrollingMovieDetail() {
-//    CollapsingToolbar()
-    Title()
+    CollapsingToolbar()
 }
 
 @Composable
@@ -273,7 +265,7 @@ fun Header(scroll: ScrollState, headerHeightPx: Float) {
             )
             .graphicsLayer {
                 translationY = -scroll.value.toFloat() / 2f // Parallax effect
-                alpha = (-1f / headerHeightPx) * scroll.value + 1
+//                alpha = (-1f / headerHeightPx) * scroll.value + 1
             }
     ){
         Box(
@@ -283,7 +275,7 @@ fun Header(scroll: ScrollState, headerHeightPx: Float) {
                 .align(Alignment.Center)
         ) {
             Image(
-                painter = rememberAsyncImagePainter(Constants.POSTER_BASE_URL + Movie().posterPath),
+                painter = rememberAsyncImagePainter( Constants.POSTER_BASE_URL + Movie().posterPath),
                 contentDescription = "",
                 contentScale = ContentScale.Fit,
                 modifier = Modifier.fillMaxSize()

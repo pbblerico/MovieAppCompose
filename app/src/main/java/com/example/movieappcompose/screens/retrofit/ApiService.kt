@@ -1,4 +1,4 @@
-package com.example.movieappcompose.retrofit
+package com.example.movieappcompose.screens.retrofit
 
 import com.example.movieappcompose.models.Movie
 import com.example.movieappcompose.models.MovieListResponse

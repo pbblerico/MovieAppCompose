@@ -1,13 +1,21 @@
 package com.example.movieappcompose.movieList.repository
 
 import com.example.movieappcompose.models.Movie
-import com.example.movieappcompose.retrofit.ApiService
+import com.example.movieappcompose.screens.retrofit.ApiService
 import com.example.movieappcompose.utils.Constants
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import com.example.movieappcompose.utils.Result
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthMultiFactorException
+import com.google.firebase.database.FirebaseDatabase
 
-class MovieRepositoryImpl(private val apiService: ApiService, private val pagingSource: MoviePagingSource): MovieRepository {
+class MovieRepositoryImpl(
+    private val apiService: ApiService,
+    private val pagingSource: MoviePagingSource,
+    private val auth: FirebaseAuth,
+    private val ref: FirebaseDatabase
+    ): MovieRepository {
     override suspend fun getMovieList(page: Int): Result<List<Movie>> = try {
         val result = apiService.getPopularMovie(page).results
         if (result.isEmpty()) Result.Empty()
@@ -20,8 +28,8 @@ class MovieRepositoryImpl(private val apiService: ApiService, private val paging
 
     override suspend fun addToFavourite(movie: Movie, result: (Result<String>) -> Unit) {
         withContext(Dispatchers.IO) {
-            Constants.ref.getReference("Users")
-                .child(Constants.auth.uid!!)
+            ref.getReference("Users")
+                .child(auth.uid!!)
                 .child("Liked")
                 .child(movie.id.toString())
                 .setValue(movie)

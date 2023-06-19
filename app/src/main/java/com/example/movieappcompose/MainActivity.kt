@@ -32,10 +32,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MovieAppComposeTheme {
-//                val navController = rememberNavController()
+                val navController = rememberNavController()
 //
-//                RootNavGraph(navController = navController)
-                CollapsingToolbar()
+                RootNavGraph(navController = navController)
+//                CollapsingToolbar()
             }
 
         }

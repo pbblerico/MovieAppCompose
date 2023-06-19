@@ -4,11 +4,16 @@ import com.example.movieappcompose.models.User
 import com.example.movieappcompose.utils.Constants
 import com.google.firebase.auth.AuthResult
 import com.example.movieappcompose.utils.Result
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-class AuthRepositoryImpl:AuthRepository {
+class AuthRepositoryImpl(
+    private val auth: FirebaseAuth,
+    private val ref: FirebaseDatabase
+):AuthRepository {
     override suspend fun signUp(
         name: String,
         surname: String,
@@ -17,13 +22,13 @@ class AuthRepositoryImpl:AuthRepository {
     ): Result<AuthResult> {
         return withContext(Dispatchers.IO) {
             try {
-                val result = Constants.auth.createUserWithEmailAndPassword(email, password).await()
+                val result = auth.createUserWithEmailAndPassword(email, password).await()
 
-                val uid = Constants.auth.uid!!
+                val uid = auth.uid!!
                 val timestamp = System.currentTimeMillis()
                 val user = User(name = name, surname = surname, uid = uid, email = email, timestamp = timestamp)
 
-                Constants.ref.getReference("Users").child(uid).setValue(user).await()
+                ref.getReference("Users").child(uid).setValue(user).await()
                 Result.Success(result)
             } catch (e: Exception) {
                 Result.Failure(e.message ?: "Uknown error occured")
@@ -34,7 +39,7 @@ class AuthRepositoryImpl:AuthRepository {
     override suspend fun login(email: String, password: String): Result<AuthResult> {
         return withContext(Dispatchers.IO) {
             try {
-                val result = Constants.auth.signInWithEmailAndPassword(email, password).await()
+                val result = auth.signInWithEmailAndPassword(email, password).await()
                 Result.Success(result)
             }
             catch (e: java.lang.Exception) {
@@ -44,6 +49,6 @@ class AuthRepositoryImpl:AuthRepository {
     }
 
     override fun logout() {
-        Constants.auth.signOut()
+        auth.signOut()
     }
 }

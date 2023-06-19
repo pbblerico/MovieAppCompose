@@ -49,7 +49,7 @@
     </fragment>
     <fragment
         android:id="@+id/movieDetailFragment"
-        android:name="com.example.movieappcompose.movieDetail.fragment.MovieDetailFragment"
+        android:name="com.example.movieappcompose.movieDetail.ui.MovieDetailFragment"
         android:label="fragment_movie_detail"
         tools:layout="@layout/fragment_movie_detail" />
 </navigation>

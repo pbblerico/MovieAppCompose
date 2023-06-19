@@ -17,10 +17,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.movieappcompose.models.Movie
-import com.example.movieappcompose.movieList.viewModel.MovieViewModel
-import androidx.compose.runtime.*
+import com.example.movieappcompose.movieList.viewModel.MovieViewModelMVI
 
 @Composable
 @Preview(showBackground = true)
@@ -29,41 +27,60 @@ fun MoviePreview() {
 }
 
 @Composable
-fun MainMovieList(onClick: (id: String) -> Unit) {
-    val viewModel = viewModel<MovieViewModel>()
+fun MainMovieList(
+    viewModel: MovieViewModelMVI
+) {
+    TODO(
+        "ViewModel"
+    )
 
-    val movies = viewModel.movieList()
-
-    MovieList(onClick = onClick, isFavouriteList = false)
+    MovieList(
+        onItemClick = {id -> viewModel.getMovieDetails(id)},
+        onIconButtonClick = {movie -> viewModel.addToFavourite(movie)},
+        isFavouriteList = true)
 }
 
 @Composable
-fun FavouriteMovieList(onClick: (id: String) -> Unit) {
-    MovieList(onClick = onClick, isFavouriteList = true)
+fun FavouriteMovieList(
+    viewModel: MovieViewModelMVI
+    ) {
+    TODO(
+        "ViewModel"
+    )
+
+    MovieList(
+        onItemClick = {id -> viewModel.getMovieDetails(id)},
+        onIconButtonClick = {movie -> viewModel.removeFromFavourite(movie)},
+        isFavouriteList = true)
 }
 
 @Composable
 fun MovieList(
-    onClick: (id: String) -> Unit,
+    onItemClick: (id: Long) -> Unit,
+    onIconButtonClick: (movie: Movie) -> Unit,
     isFavouriteList: Boolean
 ) {
 
-    val movies = List(100) {it}
+    val movies = List(100) {Movie()}
     LazyColumn{
         items(items = movies) {movie ->
-//            MovieCard(movie, onClick, isFavouriteList)
+            MovieCard(movie, onItemClick, onIconButtonClick, isFavouriteList)
         }
     }
 }
 
 @Composable
-fun MovieCard(movie: Movie, onClick: (id: String) -> Unit, isFavouriteList: Boolean) {
+fun MovieCard(
+    movie: Movie,
+    onItemClick: (id: Long) -> Unit,
+    onIconButtonClick: (movie: Movie) -> Unit,
+    isFavouriteList: Boolean) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(180.dp)
             .padding(5.dp)
-            .clickable { onClick.invoke(movie.title) },
+            .clickable { onItemClick.invoke(movie.id) },
         shape = RoundedCornerShape(8.dp),
         backgroundColor = MaterialTheme.colors.primary
             ) {
@@ -79,13 +96,17 @@ fun MovieCard(movie: Movie, onClick: (id: String) -> Unit, isFavouriteList: Bool
                     .height(160.dp)
             )
             Spacer(modifier = Modifier.width(20.dp))
-            MovieCardInfo(movie = movie, isFavouriteList, onClick)
+            MovieCardInfo(movie = movie, isFavouriteList, onIconButtonClick)
         }
     }
 }
 
 @Composable
-fun MovieCardInfo(movie: Movie, isFavouriteList: Boolean, onClick: (id: String) -> Unit) {
+fun MovieCardInfo(
+    movie: Movie,
+    isFavouriteList: Boolean,
+    onIconButtonClick: (movie: Movie) -> Unit
+) {
     Column(
         modifier = Modifier.fillMaxSize()
     ){
@@ -108,7 +129,7 @@ fun MovieCardInfo(movie: Movie, isFavouriteList: Boolean, onClick: (id: String) 
                 CustomIconText(imageVector = Icons.Rounded.CalendarToday, text = movie.releaseDate)
             }
             IconButton(
-                onClick = { onClick.invoke(movie.title) },
+                onClick = { onIconButtonClick.invoke(movie) },
                 modifier = Modifier.align(Alignment.Bottom)
             ) {
                 Icon(

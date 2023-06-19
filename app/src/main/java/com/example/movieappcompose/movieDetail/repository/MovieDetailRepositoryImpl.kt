@@ -1,7 +1,7 @@
 package com.example.movieappcompose.movieDetail.repository
 
 import com.example.movieappcompose.models.Movie
-import com.example.movieappcompose.retrofit.ApiService
+import com.example.movieappcompose.screens.retrofit.ApiService
 import com.example.movieappcompose.utils.Result
 
 class MovieDetailRepositoryImpl(private val apiService: ApiService): MovieDetailRepository {
