@@ -11,10 +11,10 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment_to_movieListFragment"
+            android:id="@+id/loginToMovieList"
             app:destination="@id/movieListFragment" />
         <action
-            android:id="@+id/action_loginFragment_to_signUpFragment"
+            android:id="@+id/loginToSignUp"
             app:destination="@id/signUpFragment" />
     </fragment>
     <fragment
@@ -28,11 +28,11 @@
     </fragment>
     <fragment
         android:id="@+id/movieListFragment"
-        android:name="com.example.movieappcompose.movieList.fragment.MovieListFragment"
+        android:name="com.example.movieappcompose.movieList.ui.MovieListFragment"
         android:label="fragment_movie_list"
         tools:layout="@layout/fragment_movie_list" >
         <action
-            android:id="@+id/action_movieListFragment_to_movieDetailFragment"
+            android:id="@+id/movieListToMovieDetail"
             app:destination="@id/movieDetailFragment" />
     </fragment>
     <fragment
@@ -51,5 +51,10 @@
         android:id="@+id/movieDetailFragment"
         android:name="com.example.movieappcompose.movieDetail.ui.MovieDetailFragment"
         android:label="fragment_movie_detail"
-        tools:layout="@layout/fragment_movie_detail" />
+        tools:layout="@layout/fragment_movie_detail" >
+        <argument
+            android:name="id"
+            app:argType="long"
+            android:defaultValue="0L" />
+    </fragment>
 </navigation>

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
+import androidx.navigation.Navigation
 import com.example.movieappcompose.composables.LoginPage
 import com.example.movieappcompose.R
 
@@ -15,7 +16,9 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
         setContent {
-            LoginPage(login = {}, signUp = {})
+            LoginPage(
+                login = {Navigation.findNavController(requireView()).navigate(R.id.loginToMovieList)},
+                signUp = {})
         }
     }
 }

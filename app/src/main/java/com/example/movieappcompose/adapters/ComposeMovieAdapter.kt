@@ -2,22 +2,34 @@ package com.example.movieappcompose.adapters
 
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
+import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieappcompose.composables.MovieCard
+import com.example.movieappcompose.models.ListItem
 import com.example.movieappcompose.models.Movie
 
 class ComposeMovieAdapter(
     private val onItemClick: (id: Long) -> Unit,
     private val onIconButtonClick: (movie: Movie) -> Unit,
     private val isFavouriteList: Boolean
-): ListAdapter<Movie, ComposeMovieAdapter.ComposeMovieViewHolder>(DiffCallback()){
+): PagingDataAdapter<ListItem, ComposeMovieAdapter.ComposeMovieViewHolder>(DiffCallback()){
 
     class ComposeMovieViewHolder(
         private val composeView: ComposeView
     ): RecyclerView.ViewHolder(composeView) {
-        fun bind(movie: Movie,
+
+        fun bind(item: ListItem,
+                 onItemClick: (id: Long) -> Unit,
+                 onIconButtonClick: (movie: Movie) -> Unit,
+                 isFavouriteList: Boolean) {
+            when(item) {
+                is ListItem.Movie -> bindMovies(item.movie, onItemClick, onIconButtonClick, isFavouriteList)
+                else -> {}
+            }
+        }
+        private fun bindMovies(movie: Movie,
                  onItemClick: (id: Long) -> Unit,
                  onIconButtonClick: (movie: Movie) -> Unit,
                  isFavouriteList: Boolean) {
@@ -32,9 +44,9 @@ class ComposeMovieAdapter(
         }
     }
 
-    class DiffCallback: DiffUtil.ItemCallback<Movie>() {
-        override fun areItemsTheSame(oldItem: Movie, newItem: Movie) = oldItem.id == newItem.id
-        override fun areContentsTheSame(oldItem: Movie, newItem: Movie) = oldItem == newItem
+    class DiffCallback: DiffUtil.ItemCallback<ListItem>() {
+        override fun areItemsTheSame(oldItem: ListItem, newItem: ListItem) = oldItem == newItem
+        override fun areContentsTheSame(oldItem: ListItem, newItem: ListItem) = oldItem == newItem
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ComposeMovieViewHolder {
@@ -42,6 +54,6 @@ class ComposeMovieAdapter(
     }
 
     override fun onBindViewHolder(holder: ComposeMovieViewHolder, position: Int) {
-        holder.bind(getItem(position), onItemClick, onIconButtonClick, isFavouriteList)
+        getItem(position)?.let { holder.bind(it, onItemClick, onIconButtonClick, isFavouriteList) }
     }
 }

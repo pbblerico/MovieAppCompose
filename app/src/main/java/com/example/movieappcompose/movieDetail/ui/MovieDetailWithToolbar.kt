@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
 import com.example.movieappcompose.models.Movie
 import com.example.movieappcompose.ui.theme.base
@@ -37,11 +38,11 @@ import com.example.movieappcompose.utils.Constants
 @Preview(showBackground = true)
 @Composable
 fun PreviewScrollingMovieDetail() {
-    CollapsingToolbar()
+    CollapsingToolbar(Movie())
 }
 
 @Composable
-fun CollapsingToolbar(movie: Movie = Movie()) {
+fun CollapsingToolbar(movie: Movie) {
     val headerHeightDp = LocalConfiguration.current.screenHeightDp.dp
     val toolbarHeightDp = 56.dp
 
@@ -254,7 +255,7 @@ fun MovieDetailButtonIcons(action: () -> Unit, imageVector: ImageVector, iconLab
 
 @Composable
 fun Header(scroll: ScrollState, headerHeightPx: Float, moviePoster: String) {
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .background(
@@ -264,22 +265,17 @@ fun Header(scroll: ScrollState, headerHeightPx: Float, moviePoster: String) {
                 )
             )
             .graphicsLayer {
-                translationY = -scroll.value.toFloat() / 2f // Parallax effect
-            }
+                translationY = -scroll.value.toFloat() / 10f // Parallax effect
+            },
+        horizontalAlignment = Alignment.CenterHorizontally
     ){
-        Box(
-            modifier = Modifier
-                .fillMaxSize(0.8f)
-                .background(light)
-                .align(Alignment.Center)
-        ) {
-            Image(
-                painter = rememberAsyncImagePainter( Constants.POSTER_BASE_URL + moviePoster),
+
+            AsyncImage(
+                model = Constants.POSTER_BASE_URL + moviePoster,
                 contentDescription = "",
                 contentScale = ContentScale.Fit,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier.fillMaxSize(0.8f)
             )
-        }
 
     }
 }

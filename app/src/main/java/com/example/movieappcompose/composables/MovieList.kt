@@ -1,6 +1,5 @@
 package com.example.movieappcompose.composables
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,7 +14,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.recyclerview.widget.RecyclerView
+import coil.compose.AsyncImage
 import com.example.movieappcompose.models.Movie
+import com.example.movieappcompose.utils.Constants
 
 @Composable
 @Preview(showBackground = true)
@@ -23,48 +26,19 @@ fun MoviePreview() {
     Text("Hello")
 }
 
-//@Composable
-//fun MainMovieList(
-//    viewModel: MovieViewModelMVI
-//) {
-//    TODO(
-//        "ViewModel"
-//    )
-//
-//    MovieList(
-//        onItemClick = {id -> viewModel.getMovieDetails(id)},
-//        onIconButtonClick = {movie -> viewModel.addToFavourite(movie)},
-//        isFavouriteList = true)
-//}
-//
-//@Composable
-//fun FavouriteMovieList(
-//    viewModel: MovieViewModelMVI
-//    ) {
-//    TODO(
-//        "ViewModel"
-//    )
-//
-//    MovieList(
-//        onItemClick = {id -> viewModel.getMovieDetails(id)},
-//        onIconButtonClick = {movie -> viewModel.removeFromFavourite(movie)},
-//        isFavouriteList = true)
-//}
-
-//@Composable
-//fun MovieList(
-//    onItemClick: (id: Long) -> Unit,
-//    onIconButtonClick: (movie: Movie) -> Unit,
-//    isFavouriteList: Boolean
-//) {
-//
-//    val movies = List(100) {Movie()}
-//    LazyColumn{
-//        items(items = movies) {movie ->
-//            MovieCard(movie, onItemClick, onIconButtonClick, isFavouriteList)
-//        }
-//    }
-//}
+@Composable
+fun MovieList(
+    recyclerView: RecyclerView,
+    modifier: Modifier = Modifier
+) {
+    Box(modifier = modifier) {
+        AndroidView(
+            factory = {
+                recyclerView
+            }
+        )
+    }
+}
 
 @Composable
 fun MovieCard(
@@ -85,8 +59,8 @@ fun MovieCard(
         Row(
             modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
         ) {
-            Image(
-                imageVector = Icons.Rounded.Image,
+            AsyncImage(
+                model = Constants.POSTER_BASE_URL + movie.posterPath,
                 contentDescription = "",
                 modifier = Modifier
                     .width(115.dp)
