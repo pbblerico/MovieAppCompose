@@ -11,8 +11,9 @@ import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieappcompose.MovieListEvent
+import com.example.movieappcompose.MovieViewModel
 import com.example.movieappcompose.adapters.ComposeMovieAdapter
-import com.example.movieappcompose.composables.MovieList
+import com.example.movieappcompose.shared.ui.composables.MovieList
 import com.example.movieappcompose.movieList.viewModel.MovieViewModelMVI
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -20,6 +21,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MovieListFragment : Fragment() {
     private val viewModel by viewModel<MovieViewModelMVI>()
+    private val viewModelMVI by viewModel<MovieViewModel>()
 
     private val movieAdapter: ComposeMovieAdapter by lazy {
         ComposeMovieAdapter(

@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.navigation.Navigation
-import com.example.movieappcompose.composables.LoginPage
+import com.example.movieappcompose.shared.ui.composables.LoginPage
 import com.example.movieappcompose.R
 
 class LoginFragment : Fragment() {

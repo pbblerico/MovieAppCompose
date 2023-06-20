@@ -1,6 +1,6 @@
 package com.example.movieappcompose.utils
 
-import com.example.movieappcompose.models.Advert
+import com.example.movieappcompose.shared.data.models.Advert
 
 class MockData {
 

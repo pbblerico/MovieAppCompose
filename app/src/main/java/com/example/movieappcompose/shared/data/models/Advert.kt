@@ -1,4 +1,4 @@
-package com.example.movieappcompose.models
+package com.example.movieappcompose.shared.data.models
 
 data class Advert(
     val title: String,

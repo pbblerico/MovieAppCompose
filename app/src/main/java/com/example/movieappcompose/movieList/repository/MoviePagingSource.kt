@@ -2,8 +2,8 @@ package com.example.movieappcompose.movieList.repository
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.movieappcompose.models.ListItem
-import com.example.movieappcompose.screens.retrofit.ApiService
+import com.example.movieappcompose.shared.data.models.ListItem
+import com.example.movieappcompose.shared.data.retrofit.ApiService
 import com.example.movieappcompose.utils.MockData
 
 class MoviePagingSource(private val apiService: ApiService): PagingSource<Int, ListItem>() {

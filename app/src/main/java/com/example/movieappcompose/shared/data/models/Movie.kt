@@ -1,4 +1,4 @@
-package com.example.movieappcompose.models
+package com.example.movieappcompose.shared.data.models
 
 import androidx.compose.ui.unit.Constraints
 import com.example.movieappcompose.utils.Constants

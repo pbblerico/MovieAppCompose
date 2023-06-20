@@ -1,4 +1,4 @@
-package com.example.movieappcompose.composables
+package com.example.movieappcompose.shared.ui.composables
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.recyclerview.widget.RecyclerView
 import coil.compose.AsyncImage
-import com.example.movieappcompose.models.Movie
+import com.example.movieappcompose.shared.data.models.Movie
 import com.example.movieappcompose.utils.Constants
 
 @Composable

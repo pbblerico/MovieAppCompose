@@ -1,6 +1,7 @@
-package com.example.movieappcompose.composables
+package com.example.movieappcompose.shared.ui.composables
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,13 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.example.movieappcompose.ui.theme.Teal200
 import com.example.movieappcompose.ui.theme.base
+import com.example.movieappcompose.ui.theme.light
 
 @Composable
 fun CustomTextField(
@@ -97,5 +98,20 @@ fun CustomTextField(
                     .fillMaxWidth(0.9f)
             )
         }
+    }
+}
+
+@Composable
+fun CustomProgressBar() {
+    Column(
+        modifier = Modifier.fillMaxSize().background(color = light),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.size(100.dp),
+            color = base,
+            strokeWidth = 10.dp
+        )
     }
 }

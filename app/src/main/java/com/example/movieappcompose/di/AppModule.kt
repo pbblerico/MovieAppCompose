@@ -1,7 +1,8 @@
 package com.example.movieappcompose.di
 
-import com.example.movieappcompose.authorization.repostiroy.AuthRepository
-import com.example.movieappcompose.authorization.repostiroy.AuthRepositoryImpl
+import com.example.movieappcompose.MovieViewModel
+import com.example.movieappcompose.authorization.repository.AuthRepository
+import com.example.movieappcompose.authorization.repository.AuthRepositoryImpl
 import com.example.movieappcompose.favouriteList.repository.FavoritesRepositoryImpl
 import com.example.movieappcompose.favouriteList.repository.FavouritesRepository
 import com.example.movieappcompose.movieDetail.repository.MovieDetailRepository
@@ -11,7 +12,7 @@ import com.example.movieappcompose.movieList.repository.MoviePagingSource
 import com.example.movieappcompose.movieList.repository.MovieRepository
 import com.example.movieappcompose.movieList.repository.MovieRepositoryImpl
 import com.example.movieappcompose.movieList.viewModel.MovieViewModelMVI
-import com.example.movieappcompose.screens.retrofit.ApiService
+import com.example.movieappcompose.shared.data.retrofit.ApiService
 import com.example.movieappcompose.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -39,6 +40,7 @@ val appModule = module {
 
     viewModel { MovieViewModelMVI(get()) }
     viewModel { MovieDetailViewModel(get()) }
+    viewModel { MovieViewModel(get()) }
 }
 
 private fun interceptor(): Interceptor =

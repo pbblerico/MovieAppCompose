@@ -1,4 +1,4 @@
-package com.example.movieappcompose.authorization.repostiroy
+package com.example.movieappcompose.authorization.repository
 
 import com.google.firebase.auth.AuthResult
 import com.example.movieappcompose.utils.Result

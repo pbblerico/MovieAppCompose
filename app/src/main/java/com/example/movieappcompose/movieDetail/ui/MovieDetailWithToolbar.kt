@@ -1,10 +1,7 @@
 package com.example.movieappcompose.movieDetail.ui
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,7 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import coil.compose.rememberAsyncImagePainter
-import com.example.movieappcompose.models.Movie
+import com.example.movieappcompose.shared.data.models.Movie
 import com.example.movieappcompose.ui.theme.base
 import com.example.movieappcompose.ui.theme.dark
 import com.example.movieappcompose.ui.theme.light
@@ -86,6 +83,7 @@ fun Title(movie: Movie) {
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Toolbar(scroll: ScrollState, headerHeightPx: Float, toolbarHeight: Float, movie: Movie) {
     val toolbarBottom by remember {
@@ -96,18 +94,32 @@ fun Toolbar(scroll: ScrollState, headerHeightPx: Float, toolbarHeight: Float, mo
         derivedStateOf { scroll.value >= toolbarBottom }
     }
 
-    AnimatedVisibility(
-        visible = showToolbar,
-        enter = fadeIn(),
-        exit = fadeOut(),
-    ) {
+    AnimatedContent(
+        targetState = movie.title,
+           transitionSpec = {
+            fadeIn(tween(1000)) with fadeOut(tween(1000))
+        }
+//        transitionSpec = {
+//            EnterTransition.None with ExitTransition.None
+//        }
+    )
+    {
 
         TopAppBar(
-            title = {Text(movie.title, color = Color.White)},
+            title = {
+                Text(
+                    if (showToolbar) movie.title else "",
+                    color = if (showToolbar) Color.Black else Color.Transparent,
+                    modifier = Modifier.animateEnterExit(
+                        enter = fadeIn(
+                            tween(1000)),
+                        exit = fadeOut(tween(1000))
+                    ))},
             modifier = Modifier.background(
-                brush = Brush.horizontalGradient(
-                    listOf(Color(0xff026586), Color(0xff032C45))
-                )
+                color =  if (showToolbar) Color.White else Color.Transparent
+//                brush = Brush.horizontalGradient(
+//                    listOf(Color(0xff026586), Color(0xff032C45))
+//                )
             ),
             navigationIcon = {
                 IconButton(
@@ -119,7 +131,7 @@ fun Toolbar(scroll: ScrollState, headerHeightPx: Float, toolbarHeight: Float, mo
                     Icon(
                         imageVector = Icons.Default.Menu,
                         contentDescription = "",
-                        tint = Color.White
+                        tint = Color.Black
                     )
                 }
             },

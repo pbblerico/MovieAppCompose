@@ -6,9 +6,9 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.movieappcompose.composables.MovieCard
-import com.example.movieappcompose.models.ListItem
-import com.example.movieappcompose.models.Movie
+import com.example.movieappcompose.shared.ui.composables.MovieCard
+import com.example.movieappcompose.shared.data.models.ListItem
+import com.example.movieappcompose.shared.data.models.Movie
 
 class ComposeMovieAdapter(
     private val onItemClick: (id: Long) -> Unit,
@@ -30,9 +30,9 @@ class ComposeMovieAdapter(
             }
         }
         private fun bindMovies(movie: Movie,
-                 onItemClick: (id: Long) -> Unit,
-                 onIconButtonClick: (movie: Movie) -> Unit,
-                 isFavouriteList: Boolean) {
+                               onItemClick: (id: Long) -> Unit,
+                               onIconButtonClick: (movie: Movie) -> Unit,
+                               isFavouriteList: Boolean) {
             composeView.setContent {
                 MovieCard(
                     movie = movie,

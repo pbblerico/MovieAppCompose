@@ -1,6 +1,6 @@
-package com.example.movieappcompose.models
+package com.example.movieappcompose.shared.data.models
 
-import com.example.movieappcompose.models.Movie
+import com.example.movieappcompose.shared.data.models.Movie
 import com.google.gson.annotations.SerializedName
 
 data class MovieListResponse(

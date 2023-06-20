@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import com.example.movieappcompose.R
-import com.example.movieappcompose.composables.SignUpPage
+import com.example.movieappcompose.shared.ui.composables.SignUpPage
 
 
 class SignUpFragment : Fragment() {

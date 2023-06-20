@@ -1,7 +1,7 @@
-package com.example.movieappcompose.screens.retrofit
+package com.example.movieappcompose.shared.data.retrofit
 
-import com.example.movieappcompose.models.Movie
-import com.example.movieappcompose.models.MovieListResponse
+import com.example.movieappcompose.shared.data.models.Movie
+import com.example.movieappcompose.shared.data.models.MovieListResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

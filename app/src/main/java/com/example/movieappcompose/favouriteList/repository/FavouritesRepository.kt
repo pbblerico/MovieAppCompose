@@ -1,6 +1,6 @@
 package com.example.movieappcompose.favouriteList.repository
 
-import com.example.movieappcompose.models.Movie
+import com.example.movieappcompose.shared.data.models.Movie
 import com.example.movieappcompose.utils.Result
 
 interface FavouritesRepository {

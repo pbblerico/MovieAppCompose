@@ -8,8 +8,8 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.example.movieappcompose.MovieListEvent
 import com.example.movieappcompose.UiEvent
-import com.example.movieappcompose.models.ListItem
-import com.example.movieappcompose.models.Movie
+import com.example.movieappcompose.shared.data.models.ListItem
+import com.example.movieappcompose.shared.data.models.Movie
 import com.example.movieappcompose.movieList.repository.MovieRepository
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.SharingStarted
