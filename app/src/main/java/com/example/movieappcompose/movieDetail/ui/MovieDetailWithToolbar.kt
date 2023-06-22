@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -62,8 +63,7 @@ fun Title(movie: Movie) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(shape = RoundedCornerShape(16.dp, 16.dp, 0.dp, 0.dp), color = base)
-            .padding(vertical = 50.dp, horizontal = 16.dp),
+            .padding(horizontal = 16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -72,7 +72,9 @@ fun Title(movie: Movie) {
             style = MaterialTheme.typography.h5
         )
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 20.dp),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             MovieDetailButtonIcons(action = {}, imageVector = Icons.Default.StarRate, iconLabel = "Rate")
@@ -99,9 +101,6 @@ fun Toolbar(scroll: ScrollState, headerHeightPx: Float, toolbarHeight: Float, mo
            transitionSpec = {
             fadeIn(tween(1000)) with fadeOut(tween(1000))
         }
-//        transitionSpec = {
-//            EnterTransition.None with ExitTransition.None
-//        }
     )
     {
 
@@ -114,7 +113,9 @@ fun Toolbar(scroll: ScrollState, headerHeightPx: Float, toolbarHeight: Float, mo
                         enter = fadeIn(
                             tween(1000)),
                         exit = fadeOut(tween(1000))
-                    ))},
+                    ),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis)},
             modifier = Modifier.background(
                 color =  if (showToolbar) Color.White else Color.Transparent
 //                brush = Brush.horizontalGradient(
@@ -129,7 +130,7 @@ fun Toolbar(scroll: ScrollState, headerHeightPx: Float, toolbarHeight: Float, mo
                         .size(36.dp)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Menu,
+                        imageVector = Icons.Default.ArrowLeft,
                         contentDescription = "",
                         tint = Color.Black
                     )
@@ -138,6 +139,24 @@ fun Toolbar(scroll: ScrollState, headerHeightPx: Float, toolbarHeight: Float, mo
             backgroundColor = Color.Transparent,
             elevation = 0.dp
         )
+    }
+}
+
+@Composable
+fun holder() {
+    Box(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Surface(
+            shape = RoundedCornerShape(10.dp),
+            modifier = Modifier
+                .width(30.dp)
+                .padding(vertical = 10.dp)
+                .height(3.dp)
+                .align(Alignment.Center)
+                ,
+            color = Color.Gray
+        ) {}
     }
 }
 
@@ -151,8 +170,7 @@ fun Overview(movieOverview: String) {
 
     Column(modifier = Modifier
         .animateContentSize(animationSpec = tween(100))
-        .background(base)
-        .padding(32.dp)
+        .padding(horizontal = 32.dp)
         )
     {
         Text(
@@ -166,7 +184,7 @@ fun Overview(movieOverview: String) {
             TextButton(onClick = { isExpanded = !isExpanded}) {
                 Text(
                     if (isExpanded) "Collapse" else "Show more",
-                    color = Color.White
+                    color = Color.Black
                 )
             }
         }
@@ -179,7 +197,7 @@ fun Rating(movieRating: Double) {
         modifier = Modifier.fillMaxWidth()
     ) {
         Text("Kinopoisk Ratings",
-            color = Color.White,
+            color = Color.Black,
             style = MaterialTheme.typography.h6,
             modifier = Modifier
                 .padding(32.dp)
@@ -203,7 +221,9 @@ fun Rating(movieRating: Double) {
                 onClick = { /*TODO*/ },
                 shape = RoundedCornerShape(16.dp)
             ) {
-                Text("Rate", fontSize = 20.sp, modifier = Modifier.padding(horizontal = 5.dp).padding(vertical = 2.dp))
+                Text("Rate", fontSize = 20.sp, modifier = Modifier
+                    .padding(horizontal = 5.dp)
+                    .padding(vertical = 2.dp))
             }
         }
     }
@@ -218,28 +238,17 @@ fun Body(scroll: ScrollState, movie: Movie) {
             .verticalScroll(scroll)
     ) {
         val configuration = LocalConfiguration.current
-        Spacer(modifier = Modifier.height(configuration.screenHeightDp.dp - 30.dp))
+        Spacer(modifier = Modifier.height(configuration.screenHeightDp.dp - 72.dp))
 
         Column(
             modifier = Modifier
-                .background(shape = RoundedCornerShape(16.dp, 16.dp, 0.dp, 0.dp), color = base)
+                .background(color = Color.White)
                 .padding(bottom = 200.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            holder()
             Title(movie)
-
-            Spacer(modifier = Modifier
-                .height(1.dp)
-                .background(light)
-                .fillMaxWidth(0.8f))
-
             Overview(movie.overview)
-
-            Spacer(modifier = Modifier
-                .height(1.dp)
-                .background(light)
-                .fillMaxWidth(0.8f))
-
             Rating(movie.rating)
         }
     }
@@ -267,28 +276,31 @@ fun MovieDetailButtonIcons(action: () -> Unit, imageVector: ImageVector, iconLab
 
 @Composable
 fun Header(scroll: ScrollState, headerHeightPx: Float, moviePoster: String) {
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(light, base),
-                    startY = headerHeightPx / 4
-                )
-            )
             .graphicsLayer {
                 translationY = -scroll.value.toFloat() / 10f // Parallax effect
-            },
-        horizontalAlignment = Alignment.CenterHorizontally
-    ){
-
+            }
+    ) {
+        AsyncImage(
+            modifier = Modifier
+                .fillMaxSize()
+                .blur(64.dp),
+            model = Constants.POSTER_BASE_URL + moviePoster,
+            contentDescription = "")
+        Box(
+            modifier = Modifier
+                .fillMaxSize(0.8f)
+                .align(Alignment.Center)
+        ) {
             AsyncImage(
                 model = Constants.POSTER_BASE_URL + moviePoster,
                 contentDescription = "",
                 contentScale = ContentScale.Fit,
-                modifier = Modifier.fillMaxSize(0.8f)
+                modifier = Modifier.fillMaxSize()
             )
-
+        }
     }
 }
 

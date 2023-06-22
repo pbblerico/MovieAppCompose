@@ -1,5 +1,6 @@
 package com.example.movieappcompose.movieList.repository
 
+import android.util.Log
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.movieappcompose.shared.data.models.ListItem
@@ -19,6 +20,7 @@ class MoviePagingSource(private val apiService: ApiService): PagingSource<Int, L
             val pageNumber = params.key ?: 1
 
             val response = apiService.getPopularMovie(pageNumber)
+            Log.d("paging source", response.results.isEmpty().toString())
             val advert = MockData().data
 
             val prevKey = if (pageNumber > 1) pageNumber - 1 else null

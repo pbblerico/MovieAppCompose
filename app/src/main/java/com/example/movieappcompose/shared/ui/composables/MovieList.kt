@@ -53,7 +53,7 @@ fun MovieCard(
             .padding(5.dp)
             .clickable { onItemClick.invoke(movie.id) },
         shape = RoundedCornerShape(8.dp),
-        backgroundColor = MaterialTheme.colors.primary
+        backgroundColor = Color.White
             ) {
 
         Row(
@@ -86,7 +86,8 @@ fun MovieCardInfo(
             style = MaterialTheme.typography.h6.copy(
                 fontWeight = FontWeight.ExtraBold
             ),
-            modifier = Modifier.padding(bottom = 5.dp)
+            modifier = Modifier.padding(bottom = 5.dp),
+            color = Color.Black
         )
         Spacer(modifier = Modifier.width(10.dp))
 
@@ -122,11 +123,13 @@ fun CustomIconText(imageVector: ImageVector, text: String) {
         modifier = Modifier.padding(vertical = 5.dp)
     ) {
         Icon(
-            imageVector = imageVector, ""
+            imageVector = imageVector, "",
+            tint = Color.Black
         )
         Text(
             text = text,
-            modifier = Modifier.padding(horizontal = 5.dp)
+            modifier = Modifier.padding(horizontal = 5.dp),
+            color = Color.Black
         )
     }
 }

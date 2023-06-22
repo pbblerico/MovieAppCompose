@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/movieListFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -44,7 +44,7 @@
             android:id="@+id/action_favouriteListFragment_to_movieListFragment"
             app:destination="@id/movieListFragment" />
         <action
-            android:id="@+id/action_favouriteListFragment_to_movieDetailFragment"
+            android:id="@+id/favouriteListToMovieDetailFragment"
             app:destination="@id/movieDetailFragment" />
     </fragment>
     <fragment

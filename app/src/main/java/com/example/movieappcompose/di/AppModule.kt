@@ -3,8 +3,7 @@ package com.example.movieappcompose.di
 import com.example.movieappcompose.MovieViewModel
 import com.example.movieappcompose.authorization.repository.AuthRepository
 import com.example.movieappcompose.authorization.repository.AuthRepositoryImpl
-import com.example.movieappcompose.favouriteList.repository.FavoritesRepositoryImpl
-import com.example.movieappcompose.favouriteList.repository.FavouritesRepository
+import com.example.movieappcompose.authorization.viewModel.LoginViewModel
 import com.example.movieappcompose.movieDetail.repository.MovieDetailRepository
 import com.example.movieappcompose.movieDetail.repository.MovieDetailRepositoryImpl
 import com.example.movieappcompose.movieDetail.viewModel.MovieDetailViewModel
@@ -32,15 +31,16 @@ val appModule = module {
     single { apiService(get()) }
     single { FirebaseAuth.getInstance() }
     single { FirebaseDatabase.getInstance() }
-    factory { MoviePagingSource(get()) }
+
     single<MovieRepository> { return@single MovieRepositoryImpl(get(), get(), get(), get()) }
     single<AuthRepository> { return@single AuthRepositoryImpl(get(), get())}
-    single<FavouritesRepository> { return@single FavoritesRepositoryImpl(get(), get())}
     single<MovieDetailRepository> { return@single MovieDetailRepositoryImpl(get())}
+    factory { MoviePagingSource(get()) }
 
     viewModel { MovieViewModelMVI(get()) }
     viewModel { MovieDetailViewModel(get()) }
     viewModel { MovieViewModel(get()) }
+    viewModel { LoginViewModel(get()) }
 }
 
 private fun interceptor(): Interceptor =

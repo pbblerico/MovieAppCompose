@@ -12,8 +12,7 @@ import com.example.movieappcompose.shared.data.models.Movie
 
 class ComposeMovieAdapter(
     private val onItemClick: (id: Long) -> Unit,
-    private val onIconButtonClick: (movie: Movie) -> Unit,
-    private val isFavouriteList: Boolean
+    private val onIconButtonClick: (movie: Movie) -> Unit
 ): PagingDataAdapter<ListItem, ComposeMovieAdapter.ComposeMovieViewHolder>(DiffCallback()){
 
     class ComposeMovieViewHolder(
@@ -22,10 +21,9 @@ class ComposeMovieAdapter(
 
         fun bind(item: ListItem,
                  onItemClick: (id: Long) -> Unit,
-                 onIconButtonClick: (movie: Movie) -> Unit,
-                 isFavouriteList: Boolean) {
+                 onIconButtonClick: (movie: Movie) -> Unit) {
             when(item) {
-                is ListItem.Movie -> bindMovies(item.movie, onItemClick, onIconButtonClick, isFavouriteList)
+                is ListItem.Movie -> bindMovies(item.movie, onItemClick, onIconButtonClick, false)
                 else -> {}
             }
         }
@@ -54,6 +52,6 @@ class ComposeMovieAdapter(
     }
 
     override fun onBindViewHolder(holder: ComposeMovieViewHolder, position: Int) {
-        getItem(position)?.let { holder.bind(it, onItemClick, onIconButtonClick, isFavouriteList) }
+        getItem(position)?.let { holder.bind(it, onItemClick, onIconButtonClick) }
     }
 }

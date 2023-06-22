@@ -9,4 +9,8 @@ interface MovieRepository {
     fun getMoviePagingSource(): MoviePagingSource
 
     suspend fun addToFavourite(movie: Movie, result: (Result<String>) -> Unit)
+
+    suspend fun getFavouritesList(result: (Result<List<Movie>>) -> Unit)
+
+    suspend fun removeFromFavourite(id: String, result: (Result<String>) -> Unit)
 }

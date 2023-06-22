@@ -1,20 +1,25 @@
 package com.example.movieappcompose.movieList.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.movieappcompose.MovieListEvent
+import com.example.movieappcompose.MainActivity
+import com.example.movieappcompose.MovieListContract
 import com.example.movieappcompose.MovieViewModel
 import com.example.movieappcompose.adapters.ComposeMovieAdapter
 import com.example.movieappcompose.shared.ui.composables.MovieList
 import com.example.movieappcompose.movieList.viewModel.MovieViewModelMVI
+import com.example.movieappcompose.shared.ui.composables.CustomProgressBar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,9 +30,8 @@ class MovieListFragment : Fragment() {
 
     private val movieAdapter: ComposeMovieAdapter by lazy {
         ComposeMovieAdapter(
-            onItemClick = {id -> viewModel.getMovieDetails(id)},
-            onIconButtonClick = {movie -> viewModel.addToFavourite(movie)},
-            isFavouriteList = false
+            onItemClick = { id -> viewModelMVI.setEvent(MovieListContract.Event.OnMovieClicked(id)) },
+            onIconButtonClick = { movie -> viewModelMVI.setEvent(MovieListContract.Event.OnIconButtonClicked(movie, false))},
         )
     }
 
@@ -42,34 +46,64 @@ class MovieListFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
+        (requireActivity() as MainActivity).showBottomBar()
+        Log.d("OCV", "here")
         setContent {
             MovieList(recyclerView = recyclerView)
         }
 
-        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModel.movieEventFlow.collect {event ->
-                when(event) {
-                    is MovieListEvent.OnMovieClicked -> onItemClicked(event.id)
-                    else -> {}
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModelMVI.uiState.collectLatest {
+                when (it.movieListState) {
+                    is MovieListContract.MovieListState.Loading -> {
+                        setContent {
+                            CustomProgressBar()
+                        }
+                    }
+                    is MovieListContract.MovieListState.Success -> {
+                        setContent {
+                            MovieList(recyclerView = recyclerView)
+                        }
+                    }
+                    is MovieListContract.MovieListState.Empty -> {
+                        Log.d("state empty", "here")
+                    }
+                    is MovieListContract.MovieListState.Error -> {
+                        Log.d("state error", "here")
+                    }
                 }
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
+            viewModelMVI.effect.collect{
+                when(it) {
+                    is MovieListContract.Effect.NavigateToDetails -> {
+                        it.id?.let { it1 -> onItemClicked(it1) }
+                    }
+                    is MovieListContract.Effect.OnIconButtonClick -> {
+                        Log.d("like", "here")
+                        it.movie?.let { movie -> viewModelMVI.addToFavourite(movie) }
+                    }
+                    is MovieListContract.Effect.Empty -> Unit
+                }
+            }
+        }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-       lifecycleScope.launch {
-           viewModel.movieMultipleListPaging.collectLatest { pagingData ->
-                    movieAdapter?.submitData(pagingData)
-           }
-
-       }
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.movieMultipleListPaging.collectLatest {pagingData ->
+                movieAdapter.submitData(pagingData)
+            }
+        }
     }
 
     private fun onItemClicked(id: Long) {
         val action = MovieListFragmentDirections.movieListToMovieDetail(id)
-        Navigation.findNavController(requireView()).navigate(action)
+        findNavController().navigate(action)
     }
 
 }

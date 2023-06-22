@@ -1,17 +1,38 @@
 package com.example.movieappcompose
 
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
+import com.example.movieappcompose.authorization.viewModel.LoginViewModel
 import com.example.movieappcompose.databinding.ActivityMainBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity() {
     private var binding: ActivityMainBinding? = null
+    private val loginViewModel by viewModel<LoginViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
 
+        loginViewModel.login("a@a.ag", "aaaaaa")
         binding?.let { setContentView(it.root) }
+
+
     }
+
+    fun showBottomBar() {
+        binding?.let {
+            it.apply {
+                bottomNavigationView.visibility = View.VISIBLE
+
+                val nav = findNavController(R.id.fragment)
+                bottomNavigationView.setupWithNavController(nav)
+            }
+        }
+    }
+
 
 }
 //

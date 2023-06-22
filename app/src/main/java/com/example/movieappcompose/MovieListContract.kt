@@ -6,9 +6,9 @@ import com.example.movieappcompose.shared.data.models.Movie
 
 class MovieListContract {
 
-    sealed class Event(val movieId: Long? = 0): UiEvent {
-        object ShowMovieList: Event()
-        class OnMovieClicked(val id: Long): Event(movieId = id)
+    sealed class Event: UiEvent {
+        object Initial: Event()
+        class OnMovieClicked(val id: Long): Event()
         class OnIconButtonClicked(val data: Movie, val remove: Boolean = false): Event()
     }
 
@@ -17,7 +17,9 @@ class MovieListContract {
     ) : UiState
 
     sealed class Effect: UiEffect {
-        object NavigateToDetails: Effect()
+        object Empty: Effect()
+        class NavigateToDetails(val id: Long? = 0): Effect()
+        class OnIconButtonClick(val movie: Movie? = null, val isFavouriteList: Boolean? = false): Effect()
     }
 
     sealed class MovieListState {
