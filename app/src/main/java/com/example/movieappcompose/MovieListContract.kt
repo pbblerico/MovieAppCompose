@@ -4,12 +4,13 @@ import androidx.paging.PagingData
 import com.example.movieappcompose.shared.data.models.ListItem
 import com.example.movieappcompose.shared.data.models.Movie
 
-class MovieListContract {
+class  MovieListContract {
 
-    sealed class Event: UiEvent {
-        object Initial: Event()
-        class OnMovieClicked(val id: Long): Event()
-        class OnIconButtonClicked(val data: Movie, val remove: Boolean = false): Event()
+    sealed interface Event: UiEvent {
+        object Idle: Event
+        class OnMovieClicked(val id: Long): Event
+        class OnIconButtonClicked(val data: Movie, val remove: Boolean = false): Event
+        class ShowMovieList(val movies: List<Movie>): Event
     }
 
     data class State(

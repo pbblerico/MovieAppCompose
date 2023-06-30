@@ -10,6 +10,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 class MovieRepositoryImpl(
     private val apiService: ApiService,
@@ -17,6 +20,13 @@ class MovieRepositoryImpl(
     private val auth: FirebaseAuth,
     private val ref: FirebaseDatabase
     ): MovieRepository {
+
+    private val favourites = auth.uid?.let {uid ->
+        ref.getReference("Users")
+            .child(uid)
+            .child("Liked")
+    }
+
     override suspend fun getMovieList(page: Int): Result<List<Movie>> = try {
         val result = apiService.getPopularMovie(page).results
         if (result.isEmpty()) Result.Empty()
@@ -44,6 +54,10 @@ class MovieRepositoryImpl(
                     )
                 }
         }
+    }
+
+    override suspend fun addToFavourite(movie: Movie): Flow<Result<String>> = callbackFlow {
+
     }
 
     override suspend fun getFavouritesList(result: (Result<List<Movie>>) -> Unit) {
@@ -81,6 +95,31 @@ class MovieRepositoryImpl(
         }
     }
 
+    override suspend fun getFavouritesList(): Flow<Result<List<Movie>>> = callbackFlow {
+        val listener = object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val movies = snapshot.children.map {
+                    it.getValue(Movie::class.java)
+                }
+
+                if(movies.isNotEmpty()) trySend(Result.Success(movies as List<Movie>))
+
+                trySend(Result.Empty())
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                trySend(Result.Failure(error.message))
+            }
+        }
+
+        favourites?.addValueEventListener(listener)
+
+        awaitClose {
+            favourites?.removeEventListener(listener)
+            channel.close()
+        }
+    }
+
     override suspend fun removeFromFavourite(id: String, result: (Result<String>) -> Unit) {
         withContext(Dispatchers.IO) {
             try {
@@ -104,6 +143,10 @@ class MovieRepositoryImpl(
                 )
             }
         }
+    }
+
+    override suspend fun removeFromFavourite(id: String): Flow<Result<String>> {
+        TODO("Not yet implemented")
     }
 
 }

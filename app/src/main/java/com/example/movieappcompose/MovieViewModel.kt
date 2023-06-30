@@ -1,42 +1,41 @@
 package com.example.movieappcompose
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.paging.*
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.example.movieappcompose.movieList.repository.MovieRepository
 import com.example.movieappcompose.shared.data.models.ListItem
 import com.example.movieappcompose.shared.data.models.Movie
-import kotlinx.coroutines.launch
 import com.example.movieappcompose.utils.Result
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
 class MovieViewModel(private val repository: MovieRepository) :
     BaseViewModel<MovieListContract.Event, MovieListContract.State, MovieListContract.Effect>() {
 
-    private val _favouritesListStatus = MutableLiveData<Result<List<Movie>>>()
-    val favouritesListStatus: LiveData<Result<List<Movie>>> = _favouritesListStatus
+    private val _favouritesListStatus = MutableStateFlow<Result<List<Movie>>>(Result.Loading())
+    val favouritesListStatus: StateFlow<Result<List<Movie>>> = _favouritesListStatus
 
-    private val movieMultipleListPaging: StateFlow<PagingData<ListItem>> =
-        flow<PagingData<ListItem>> {
-            Pager(
-                PagingConfig(
-                    pageSize = 1
-                )
-            ) {
-                repository.getMoviePagingSource()
-            }
-        }
-            .cachedIn(viewModelScope)
-            .stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
+//    private val _favouritesListStatus = MutableStateFlow<UiState>(createInitialState())
+//    val favouritesListStatus: StateFlow<UiState> = _favouritesListStatus
+
+    val movieMultipleListPaging: StateFlow<PagingData<ListItem>> =
+        Pager(
+            PagingConfig(pageSize = 1)
+        ) {
+            repository.getMoviePagingSource()
+        }.flow.cachedIn(viewModelScope).stateIn(viewModelScope, SharingStarted.Lazily, PagingData.empty())
+
 
     override fun createInitialState(): MovieListContract.State {
         return MovieListContract.State(MovieListContract.MovieListState.Empty)
-    }
-
-    override fun createInitialEvent(): MovieListContract.Event {
-        return MovieListContract.Event.Initial
     }
 
     override fun handleEvent(event: MovieListContract.Event) {
@@ -54,10 +53,13 @@ class MovieViewModel(private val repository: MovieRepository) :
     }
 
     fun getFavoritesList() {
-        _favouritesListStatus.postValue(Result.Loading())
+//        _favouritesListStatus.value = Result.Loading()
         viewModelScope.launch(Dispatchers.Main) {
-            repository.getFavouritesList {
-                _favouritesListStatus.postValue(it)
+            repository.getFavouritesList().collectLatest {
+                _favouritesListStatus.value = it
+//                _favouritesListStatus.
+//                val newState = _favouritesListStatus.value
+//                _favouritesListStatus.value.data -
             }
         }
     }

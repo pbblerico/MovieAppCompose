@@ -10,7 +10,6 @@ import com.example.movieappcompose.movieDetail.viewModel.MovieDetailViewModel
 import com.example.movieappcompose.movieList.repository.MoviePagingSource
 import com.example.movieappcompose.movieList.repository.MovieRepository
 import com.example.movieappcompose.movieList.repository.MovieRepositoryImpl
-import com.example.movieappcompose.movieList.viewModel.MovieViewModelMVI
 import com.example.movieappcompose.shared.data.retrofit.ApiService
 import com.example.movieappcompose.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
@@ -37,7 +36,7 @@ val appModule = module {
     single<MovieDetailRepository> { return@single MovieDetailRepositoryImpl(get())}
     factory { MoviePagingSource(get()) }
 
-    viewModel { MovieViewModelMVI(get()) }
+
     viewModel { MovieDetailViewModel(get()) }
     viewModel { MovieViewModel(get()) }
     viewModel { LoginViewModel(get()) }

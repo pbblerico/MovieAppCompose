@@ -6,8 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -18,20 +16,18 @@ import com.example.movieappcompose.MovieListContract
 import com.example.movieappcompose.MovieViewModel
 import com.example.movieappcompose.adapters.ComposeMovieAdapter
 import com.example.movieappcompose.shared.ui.composables.MovieList
-import com.example.movieappcompose.movieList.viewModel.MovieViewModelMVI
 import com.example.movieappcompose.shared.ui.composables.CustomProgressBar
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MovieListFragment : Fragment() {
-    private val viewModel by viewModel<MovieViewModelMVI>()
-    private val viewModelMVI by viewModel<MovieViewModel>()
+    private val viewModel by viewModel<MovieViewModel>()
 
     private val movieAdapter: ComposeMovieAdapter by lazy {
         ComposeMovieAdapter(
-            onItemClick = { id -> viewModelMVI.setEvent(MovieListContract.Event.OnMovieClicked(id)) },
-            onIconButtonClick = { movie -> viewModelMVI.setEvent(MovieListContract.Event.OnIconButtonClicked(movie, false))},
+            onItemClick = { id -> viewModel.setEvent(MovieListContract.Event.OnMovieClicked(id)) },
+            onIconButtonClick = { movie -> viewModel.setEvent(MovieListContract.Event.OnIconButtonClicked(movie, false))},
         )
     }
 
@@ -53,7 +49,7 @@ class MovieListFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            viewModelMVI.uiState.collectLatest {
+            viewModel.uiState.collectLatest {
                 when (it.movieListState) {
                     is MovieListContract.MovieListState.Loading -> {
                         setContent {
@@ -76,14 +72,14 @@ class MovieListFragment : Fragment() {
         }
 
         viewLifecycleOwner.lifecycleScope.launchWhenStarted {
-            viewModelMVI.effect.collect{
+            viewModel.effect.collect{
                 when(it) {
                     is MovieListContract.Effect.NavigateToDetails -> {
                         it.id?.let { it1 -> onItemClicked(it1) }
                     }
                     is MovieListContract.Effect.OnIconButtonClick -> {
                         Log.d("like", "here")
-                        it.movie?.let { movie -> viewModelMVI.addToFavourite(movie) }
+                        it.movie?.let { movie -> viewModel.addToFavourite(movie) }
                     }
                     is MovieListContract.Effect.Empty -> Unit
                 }
