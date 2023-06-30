@@ -45,7 +45,7 @@ class FavouriteMovieViewModel(
                when(it) {
                    is Result.Success -> {
                        it.data?.let {movies ->
-                           setState { copy(movieListState = MovieListContract.MovieListState.Success(movies)) }
+                           setState { copy(movieListState = MovieListContract.MovieListState.Success(movieList = movies)) }
                            Log.d("asd", movies.size.toString())
                        }
                    }

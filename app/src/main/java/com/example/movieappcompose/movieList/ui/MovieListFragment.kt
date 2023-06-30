@@ -2,11 +2,14 @@ package com.example.movieappcompose.movieList.ui
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.ComposeView
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,9 +18,8 @@ import com.example.movieappcompose.MainActivity
 import com.example.movieappcompose.MovieListContract
 import com.example.movieappcompose.MovieViewModel
 import com.example.movieappcompose.adapters.ComposeMovieAdapter
-import com.example.movieappcompose.shared.ui.composables.MovieList
 import com.example.movieappcompose.shared.ui.composables.CustomProgressBar
-import kotlinx.coroutines.flow.collectLatest
+import com.example.movieappcompose.shared.ui.composables.MovieList
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -44,30 +46,26 @@ class MovieListFragment : Fragment() {
     ): View = ComposeView(requireContext()).apply {
         (requireActivity() as MainActivity).showBottomBar()
         Log.d("OCV", "here")
-        setContent {
-            MovieList(recyclerView = recyclerView)
-        }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.uiState.collectLatest {
-                when (it.movieListState) {
-                    is MovieListContract.MovieListState.Loading -> {
-                        setContent {
-                            CustomProgressBar()
-                        }
-                    }
-                    is MovieListContract.MovieListState.Success -> {
-                        setContent {
-                            MovieList(recyclerView = recyclerView)
-                        }
-                    }
-                    is MovieListContract.MovieListState.Empty -> {
-                        Log.d("state empty", "here")
-                    }
-                    is MovieListContract.MovieListState.Error -> {
-                        Log.d("state error", "here")
-                    }
+        viewModel.setEvent(MovieListContract.Event.ShowMovieList)
+        setContent {
+            val state: MovieListContract.State by viewModel.uiState.collectAsState()
+
+            when(state.movieListState) {
+                MovieListContract.MovieListState.Loading -> {
+                    CustomProgressBar()
                 }
+                is MovieListContract.MovieListState.Success -> {
+                    val data = (state.movieListState as MovieListContract.MovieListState.Success).pagingData
+                    val coroutine = rememberCoroutineScope()
+                    coroutine.launch {
+                        if (data != null) {
+                            movieAdapter.submitData(data)
+                        }
+                    }
+                    MovieList(recyclerView = recyclerView)
+                }
+                else -> Unit
             }
         }
 
@@ -83,16 +81,6 @@ class MovieListFragment : Fragment() {
                     }
                     is MovieListContract.Effect.Empty -> Unit
                 }
-            }
-        }
-
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.movieMultipleListPaging.collectLatest {pagingData ->
-                movieAdapter.submitData(pagingData)
             }
         }
     }

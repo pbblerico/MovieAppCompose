@@ -7,7 +7,6 @@ import com.example.movieappcompose.shared.data.models.Movie
 class  MovieListContract {
 
     sealed interface Event: UiEvent {
-        object Idle: Event
         class OnMovieClicked(val id: Long): Event
         class OnIconButtonClicked(val data: Movie, val remove: Boolean = false): Event
         object ShowMovieList: Event
@@ -27,7 +26,7 @@ class  MovieListContract {
         object Empty: MovieListState()
         object Loading: MovieListState()
         data class Error(val message: String? = null): MovieListState()
-        data class Success(val movieList: List<Movie>): MovieListState()
+        data class Success(val movieList: List<Movie>? = null, val pagingData: PagingData<ListItem>? = null): MovieListState()
     }
 
 }

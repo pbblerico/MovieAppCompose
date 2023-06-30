@@ -23,7 +23,6 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavouriteListFragment : Fragment() {
-//    private val viewModel by viewModel<MovieViewModel>()
     private val viewModel by viewModel<FavouriteMovieViewModel>()
     private val favouriteListAdapter: FavouriteMovieAdapter by lazy {
         FavouriteMovieAdapter(
@@ -52,7 +51,6 @@ class FavouriteListFragment : Fragment() {
                }
                is MovieListContract.MovieListState.Success -> {
                    val list = (state.movieListState as MovieListContract.MovieListState.Success).movieList
-                   Log.d("asddd", list.size.toString())
                    favouriteListAdapter.submitList(list)
                    MovieList(recyclerView = recyclerView)
                }

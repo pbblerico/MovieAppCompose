@@ -8,9 +8,6 @@ import androidx.paging.cachedIn
 import com.example.movieappcompose.movieList.repository.MovieRepository
 import com.example.movieappcompose.shared.data.models.ListItem
 import com.example.movieappcompose.shared.data.models.Movie
-import com.example.movieappcompose.utils.Result
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -20,13 +17,7 @@ import kotlinx.coroutines.launch
 class MovieViewModel(private val repository: MovieRepository) :
     BaseViewModel<MovieListContract.Event, MovieListContract.State, MovieListContract.Effect>() {
 
-    private val _favouritesListStatus = MutableStateFlow<Result<List<Movie>>>(Result.Loading())
-    val favouritesListStatus: StateFlow<Result<List<Movie>>> = _favouritesListStatus
-
-    private val _favouritesListState = MutableStateFlow<UiState>(createInitialState())
-    val favouritesListState: StateFlow<UiState> = _favouritesListState
-
-    val movieMultipleListPaging: StateFlow<PagingData<ListItem>> =
+    private val movieMultipleListPaging: StateFlow<PagingData<ListItem>> =
         Pager(
             PagingConfig(pageSize = 1)
         ) {
@@ -41,7 +32,7 @@ class MovieViewModel(private val repository: MovieRepository) :
     override fun handleEvent(event: MovieListContract.Event) {
         when (event) {
             is MovieListContract.Event.ShowMovieList -> {
-                setState { copy(movieListState = MovieListContract.MovieListState.Loading) }
+                getMovieList()
             }
             is MovieListContract.Event.OnMovieClicked -> {
                 setEffect { MovieListContract.Effect.NavigateToDetails(event.id) }
@@ -51,30 +42,20 @@ class MovieViewModel(private val repository: MovieRepository) :
                     setEffect { MovieListContract.Effect.OnIconButtonClick(movie, event.remove) }
                 }
             }
-            else -> Unit
         }
     }
 
-    fun getFavoritesList() {
-//        _favouritesListStatus.value = Result.Loading()
-        viewModelScope.launch(Dispatchers.Main) {
-            repository.getFavouritesList().collectLatest {
-                _favouritesListStatus.value = it
-//                _favouritesListStatus.
-//                val newState = _favouritesListStatus.value
-//                _favouritesListStatus.value.data -
+    private fun getMovieList() {
+        setState { copy(movieListState = MovieListContract.MovieListState.Loading) }
+        viewModelScope.launch {
+            movieMultipleListPaging.collectLatest {
+                setState { copy(movieListState = MovieListContract.MovieListState.Success(pagingData = it)) }
             }
         }
     }
 
-    fun removeFromFavourite(id: String) {
-        viewModelScope.launch(Dispatchers.Main) {
-            repository.removeFromFavourite(id) {}
-        }
-    }
 
     fun addToFavourite(movie: Movie) {
-
         viewModelScope.launch {
             repository.addToFavourite(movie) {}
         }
