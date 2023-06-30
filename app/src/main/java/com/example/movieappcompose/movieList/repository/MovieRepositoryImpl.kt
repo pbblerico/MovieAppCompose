@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
 class MovieRepositoryImpl(
-    private val apiService: ApiService,
     private val pagingSource: MoviePagingSource,
     private val auth: FirebaseAuth,
     private val ref: FirebaseDatabase
@@ -25,14 +24,6 @@ class MovieRepositoryImpl(
         ref.getReference("Users")
             .child(uid)
             .child("Liked")
-    }
-
-    override suspend fun getMovieList(page: Int): Result<List<Movie>> = try {
-        val result = apiService.getPopularMovie(page).results
-        if (result.isEmpty()) Result.Empty()
-        else Result.Success(result)
-    } catch (e: Exception) {
-        Result.Failure(e.message ?: e.localizedMessage)
     }
 
     override fun getMoviePagingSource() = pagingSource
@@ -57,41 +48,17 @@ class MovieRepositoryImpl(
     }
 
     override suspend fun addToFavourite(movie: Movie): Flow<Result<String>> = callbackFlow {
-
-    }
-
-    override suspend fun getFavouritesList(result: (Result<List<Movie>>) -> Unit) {
-        withContext(Dispatchers.IO) {
-            try {
-                val favArrayList: ArrayList<Movie> = ArrayList()
-
-                ref.getReference("Users")
-                    .child(auth.uid!!)
-                    .child("Liked")
-                    .addValueEventListener(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            favArrayList.clear()
-
-                            for (ds in snapshot.children) {
-                                val model = ds.getValue(Movie::class.java)
-
-                                favArrayList.add(model!!)
-                            }
-
-                            result.invoke(
-                                Result.Success(favArrayList.toList())
-                            )
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {}
-                    })
-
-
-            } catch (e: java.lang.Exception) {
-                result.invoke(
-                    Result.Failure(e.message ?: e.localizedMessage)
-                )
+        favourites?.child(movie.id.toString())
+            ?.setValue(movie)
+            ?.addOnSuccessListener {
+                trySend(Result.Success("${movie.title} was added to library"))
             }
+            ?.addOnFailureListener {e ->
+                trySend(Result.Failure(e.message ?: e.localizedMessage))
+            }
+
+        awaitClose {
+            channel.close()
         }
     }
 
@@ -103,8 +70,7 @@ class MovieRepositoryImpl(
                 }
 
                 if(movies.isNotEmpty()) trySend(Result.Success(movies as List<Movie>))
-
-                trySend(Result.Empty())
+                else trySend(Result.Empty())
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -145,8 +111,15 @@ class MovieRepositoryImpl(
         }
     }
 
-    override suspend fun removeFromFavourite(id: String): Flow<Result<String>> {
-        TODO("Not yet implemented")
+    override suspend fun removeFromFavourite(id: String): Flow<Result<String>> = callbackFlow {
+        favourites?.child(id)
+            ?.removeValue()
+            ?.addOnSuccessListener {
+                trySend(Result.Success("removed"))
+            }
+            ?.addOnFailureListener {e ->
+                trySend(Result.Failure(e.message ?: e.localizedMessage))
+            }
     }
 
 }

@@ -23,8 +23,8 @@ class MovieViewModel(private val repository: MovieRepository) :
     private val _favouritesListStatus = MutableStateFlow<Result<List<Movie>>>(Result.Loading())
     val favouritesListStatus: StateFlow<Result<List<Movie>>> = _favouritesListStatus
 
-//    private val _favouritesListStatus = MutableStateFlow<UiState>(createInitialState())
-//    val favouritesListStatus: StateFlow<UiState> = _favouritesListStatus
+    private val _favouritesListState = MutableStateFlow<UiState>(createInitialState())
+    val favouritesListState: StateFlow<UiState> = _favouritesListState
 
     val movieMultipleListPaging: StateFlow<PagingData<ListItem>> =
         Pager(
@@ -40,6 +40,9 @@ class MovieViewModel(private val repository: MovieRepository) :
 
     override fun handleEvent(event: MovieListContract.Event) {
         when (event) {
+            is MovieListContract.Event.ShowMovieList -> {
+                setState { copy(movieListState = MovieListContract.MovieListState.Loading) }
+            }
             is MovieListContract.Event.OnMovieClicked -> {
                 setEffect { MovieListContract.Effect.NavigateToDetails(event.id) }
             }
@@ -66,28 +69,14 @@ class MovieViewModel(private val repository: MovieRepository) :
 
     fun removeFromFavourite(id: String) {
         viewModelScope.launch(Dispatchers.Main) {
-            repository.removeFromFavourite(id) {
-            }
+            repository.removeFromFavourite(id) {}
         }
     }
 
     fun addToFavourite(movie: Movie) {
 
         viewModelScope.launch {
-            repository.addToFavourite(movie) {
-                when (it) {
-                    is Result.Success -> {
-                    }
-                    else -> {}
-                }
-            }
-        }
-    }
-
-    fun removeFromFavourite(movie: Movie) {
-        setEffect { MovieListContract.Effect.OnIconButtonClick(movie, true) }
-        viewModelScope.launch {
-            TODO("Remove from favourite")
+            repository.addToFavourite(movie) {}
         }
     }
 }

@@ -10,7 +10,7 @@ class  MovieListContract {
         object Idle: Event
         class OnMovieClicked(val id: Long): Event
         class OnIconButtonClicked(val data: Movie, val remove: Boolean = false): Event
-        class ShowMovieList(val movies: List<Movie>): Event
+        object ShowMovieList: Event
     }
 
     data class State(
@@ -27,7 +27,7 @@ class  MovieListContract {
         object Empty: MovieListState()
         object Loading: MovieListState()
         data class Error(val message: String? = null): MovieListState()
-        data class Success(val pagingList: PagingData<ListItem>): MovieListState()
+        data class Success(val movieList: List<Movie>): MovieListState()
     }
 
 }

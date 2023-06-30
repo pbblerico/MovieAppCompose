@@ -78,7 +78,7 @@ class MovieListFragment : Fragment() {
                         it.id?.let { it1 -> onItemClicked(it1) }
                     }
                     is MovieListContract.Effect.OnIconButtonClick -> {
-                        Log.d("like", "here")
+                        Log.d("like", "liked")
                         it.movie?.let { movie -> viewModel.addToFavourite(movie) }
                     }
                     is MovieListContract.Effect.Empty -> Unit

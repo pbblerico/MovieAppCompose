@@ -1,5 +1,6 @@
 package com.example.movieappcompose.di
 
+import com.example.movieappcompose.FavouriteMovieViewModel
 import com.example.movieappcompose.MovieViewModel
 import com.example.movieappcompose.authorization.repository.AuthRepository
 import com.example.movieappcompose.authorization.repository.AuthRepositoryImpl
@@ -31,15 +32,15 @@ val appModule = module {
     single { FirebaseAuth.getInstance() }
     single { FirebaseDatabase.getInstance() }
 
-    single<MovieRepository> { return@single MovieRepositoryImpl(get(), get(), get(), get()) }
+    single<MovieRepository> { return@single MovieRepositoryImpl(get(), get(), get()) }
     single<AuthRepository> { return@single AuthRepositoryImpl(get(), get())}
     single<MovieDetailRepository> { return@single MovieDetailRepositoryImpl(get())}
     factory { MoviePagingSource(get()) }
 
-
     viewModel { MovieDetailViewModel(get()) }
     viewModel { MovieViewModel(get()) }
     viewModel { LoginViewModel(get()) }
+    viewModel { FavouriteMovieViewModel(get())}
 }
 
 private fun interceptor(): Interceptor =

@@ -34,7 +34,7 @@ abstract class BaseViewModel<Event: UiEvent, State: UiState, Effect: UiEffect>: 
         }
     }
 
-    abstract fun handleEvent(event: Event)
+    protected abstract fun handleEvent(event: Event)
 
     fun setEvent(event: Event) {
         val newEvent = event
@@ -42,7 +42,7 @@ abstract class BaseViewModel<Event: UiEvent, State: UiState, Effect: UiEffect>: 
     }
 
     protected fun setState(reduce: State.() -> State) {
-        val newState = _uiState.value.reduce()
+        val newState = uiState.value.reduce()
 
         _uiState.value = newState
     }
