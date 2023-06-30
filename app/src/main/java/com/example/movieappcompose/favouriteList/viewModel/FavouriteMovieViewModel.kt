@@ -1,7 +1,9 @@
-package com.example.movieappcompose
+package com.example.movieappcompose.favouriteList.viewModel
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
+import com.example.movieappcompose.mvi.BaseViewModel
+import com.example.movieappcompose.MovieListContract
 import com.example.movieappcompose.movieList.repository.MovieRepository
 import kotlinx.coroutines.launch
 import com.example.movieappcompose.utils.Result
@@ -25,10 +27,8 @@ class FavouriteMovieViewModel(
             is MovieListContract.Event.OnIconButtonClicked -> {
                 event.data.let { movie ->
                     setEffect { MovieListContract.Effect.OnIconButtonClick(movie, event.remove) }
-//                    getFavouriteList()
                 }
             }
-            else -> Unit
         }
     }
 
@@ -45,8 +45,10 @@ class FavouriteMovieViewModel(
                when(it) {
                    is Result.Success -> {
                        it.data?.let {movies ->
-                           setState { copy(movieListState = MovieListContract.MovieListState.Success(movieList = movies)) }
-                           Log.d("asd", movies.size.toString())
+                           setState { copy(movieListState = MovieListContract.MovieListState.Success(
+                               movieList = movies
+                           )
+                           ) }
                        }
                    }
                    else -> {

@@ -3,6 +3,9 @@ package com.example.movieappcompose
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieappcompose.movieList.repository.MovieRepository
+import com.example.movieappcompose.mvi.UiEffect
+import com.example.movieappcompose.mvi.UiEvent
+import com.example.movieappcompose.mvi.UiState
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow

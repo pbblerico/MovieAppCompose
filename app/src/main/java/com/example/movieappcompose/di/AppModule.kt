@@ -1,7 +1,7 @@
 package com.example.movieappcompose.di
 
-import com.example.movieappcompose.FavouriteMovieViewModel
-import com.example.movieappcompose.MovieViewModel
+import com.example.movieappcompose.favouriteList.viewModel.FavouriteMovieViewModel
+import com.example.movieappcompose.movieList.viewModel.MovieViewModel
 import com.example.movieappcompose.authorization.repository.AuthRepository
 import com.example.movieappcompose.authorization.repository.AuthRepositoryImpl
 import com.example.movieappcompose.authorization.viewModel.LoginViewModel
@@ -40,7 +40,7 @@ val appModule = module {
     viewModel { MovieDetailViewModel(get()) }
     viewModel { MovieViewModel(get()) }
     viewModel { LoginViewModel(get()) }
-    viewModel { FavouriteMovieViewModel(get())}
+    viewModel { FavouriteMovieViewModel(get()) }
 }
 
 private fun interceptor(): Interceptor =

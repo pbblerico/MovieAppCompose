@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.movieappcompose.FavouriteMovieViewModel
+import com.example.movieappcompose.favouriteList.viewModel.FavouriteMovieViewModel
 import com.example.movieappcompose.MovieListContract
 import com.example.movieappcompose.adapters.FavouriteMovieAdapter
 import com.example.movieappcompose.shared.ui.composables.CustomProgressBar
@@ -61,54 +61,6 @@ class FavouriteListFragment : Fragment() {
 
        }
 
-
-//        viewModel.getFavoritesList()
-//       setContent {
-//           val state: Result<List<Movie>> by viewModel.favouritesListStatus
-//
-//           when(state) {
-//               is Result.Loading -> {
-////                        setContent {
-//                            CustomProgressBar()
-////                        }
-//                   }
-//                   is Result.Success -> {
-//                       favouriteListAdapter.submitList(state.data)
-////                       setContent {
-//                           MovieList(recyclerView = recyclerView)
-////                       }
-//                   }
-//
-//                   is Result.Failure -> {
-//                       Log.d("favourite", "erre")
-//                   }
-//
-//                   is Result.Empty -> {
-//                   }
-//           }
-//       }
-//
-//       viewLifecycleOwner.lifecycleScope.launch {
-//           viewModel.uiState.collectLatest {
-//               when(it.movieListState) {
-//                   MovieListContract.MovieListState.Loading -> {
-//                       setContent {
-//                           CustomProgressBar()
-//                           Log.d("log", "loadign")
-//                       }
-//                   }
-//                   is MovieListContract.MovieListState.Success -> {
-//                       favouriteListAdapter.submitList(it.movieListState.movieList)
-//                       setContent {
-//                           MovieList(recyclerView = recyclerView)
-//                       }
-//                   }
-//                   else -> {
-//                       Log.d("log", "${it.movieListState}")
-//                   }
-//               }
-//           }
-//       }
        viewLifecycleOwner.lifecycleScope.launch {
            viewModel.effect.collectLatest {
                when(it) {
@@ -116,7 +68,6 @@ class FavouriteListFragment : Fragment() {
                        it.id?.let { id -> onItemClicked(id) }
                    }
                   is MovieListContract.Effect.OnIconButtonClick -> {
-                      Log.d("remove", "Here")
                       it.movie?.let { movie -> viewModel.removeFromFavourite(movie.id.toString()) }
 
                   }

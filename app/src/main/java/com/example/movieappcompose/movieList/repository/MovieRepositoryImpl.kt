@@ -1,18 +1,17 @@
 package com.example.movieappcompose.movieList.repository
 
 import com.example.movieappcompose.shared.data.models.Movie
-import com.example.movieappcompose.shared.data.retrofit.ApiService
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import com.example.movieappcompose.utils.Result
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.withContext
 
 class MovieRepositoryImpl(
     private val pagingSource: MoviePagingSource,

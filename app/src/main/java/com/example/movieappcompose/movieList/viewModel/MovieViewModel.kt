@@ -1,10 +1,12 @@
-package com.example.movieappcompose
+package com.example.movieappcompose.movieList.viewModel
 
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.example.movieappcompose.mvi.BaseViewModel
+import com.example.movieappcompose.MovieListContract
 import com.example.movieappcompose.movieList.repository.MovieRepository
 import com.example.movieappcompose.shared.data.models.ListItem
 import com.example.movieappcompose.shared.data.models.Movie

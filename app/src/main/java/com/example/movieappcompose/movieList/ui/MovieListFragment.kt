@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.movieappcompose.MainActivity
 import com.example.movieappcompose.MovieListContract
-import com.example.movieappcompose.MovieViewModel
+import com.example.movieappcompose.movieList.viewModel.MovieViewModel
 import com.example.movieappcompose.adapters.ComposeMovieAdapter
 import com.example.movieappcompose.shared.ui.composables.CustomProgressBar
 import com.example.movieappcompose.shared.ui.composables.MovieList
@@ -45,7 +45,6 @@ class MovieListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
         (requireActivity() as MainActivity).showBottomBar()
-        Log.d("OCV", "here")
 
         viewModel.setEvent(MovieListContract.Event.ShowMovieList)
         setContent {
@@ -76,7 +75,6 @@ class MovieListFragment : Fragment() {
                         it.id?.let { it1 -> onItemClicked(it1) }
                     }
                     is MovieListContract.Effect.OnIconButtonClick -> {
-                        Log.d("like", "liked")
                         it.movie?.let { movie -> viewModel.addToFavourite(movie) }
                     }
                     is MovieListContract.Effect.Empty -> Unit

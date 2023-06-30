@@ -1,4 +1,4 @@
-package com.example.movieappcompose
+package com.example.movieappcompose.mvi
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

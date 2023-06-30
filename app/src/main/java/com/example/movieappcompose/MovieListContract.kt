@@ -1,6 +1,9 @@
 package com.example.movieappcompose
 
 import androidx.paging.PagingData
+import com.example.movieappcompose.mvi.UiEffect
+import com.example.movieappcompose.mvi.UiEvent
+import com.example.movieappcompose.mvi.UiState
 import com.example.movieappcompose.shared.data.models.ListItem
 import com.example.movieappcompose.shared.data.models.Movie
 
