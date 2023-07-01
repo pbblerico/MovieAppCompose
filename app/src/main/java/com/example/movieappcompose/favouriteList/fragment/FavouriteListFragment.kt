@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.movieappcompose.FavouriteViewModelTest
 import com.example.movieappcompose.favouriteList.viewModel.FavouriteMovieViewModel
 import com.example.movieappcompose.MovieListContract
 import com.example.movieappcompose.adapters.FavouriteMovieAdapter
@@ -23,7 +24,8 @@ import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavouriteListFragment : Fragment() {
-    private val viewModel by viewModel<FavouriteMovieViewModel>()
+    private val viewModel by viewModel<FavouriteViewModelTest>()
+
     private val favouriteListAdapter: FavouriteMovieAdapter by lazy {
         FavouriteMovieAdapter(
             onItemClick = {id -> viewModel.setEvent(MovieListContract.Event.OnMovieClicked(id))},
@@ -41,6 +43,7 @@ class FavouriteListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = ComposeView(requireContext()).apply {
 
+       viewModel.subscribeEvents()
        viewModel.setEvent(MovieListContract.Event.ShowMovieList)
        setContent {
            val state: MovieListContract.State by viewModel.uiState.collectAsState()
@@ -58,24 +61,26 @@ class FavouriteListFragment : Fragment() {
                    Log.d("asddd", state.movieListState.toString())
                }
            }
-
        }
-
-       viewLifecycleOwner.lifecycleScope.launch {
-           viewModel.effect.collectLatest {
-               when(it) {
-                   is MovieListContract.Effect.NavigateToDetails -> {
-                       it.id?.let { id -> onItemClicked(id) }
-                   }
-                  is MovieListContract.Effect.OnIconButtonClick -> {
-                      it.movie?.let { movie -> viewModel.removeFromFavourite(movie.id.toString()) }
-
-                  }
-                   is MovieListContract.Effect.Empty -> Unit
-               }
-           }
-       }
+       observe()
    }
+
+    private fun observe() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.effect.collectLatest {
+                when(it) {
+                    is MovieListContract.Effect.NavigateToDetails -> {
+                        it.id?.let { id -> onItemClicked(id) }
+                    }
+                    is MovieListContract.Effect.OnIconButtonClick -> {
+                        it.movie?.let { movie -> viewModel.removeFromFavourite(movie.id.toString()) }
+
+                    }
+                    is MovieListContract.Effect.Empty -> Unit
+                }
+            }
+        }
+    }
 
     private fun onItemClicked(id: Long) {
         val action = FavouriteListFragmentDirections.favouriteListToMovieDetailFragment(id)

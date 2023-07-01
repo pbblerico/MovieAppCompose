@@ -46,8 +46,7 @@ class FavouriteMovieViewModel(
                    is Result.Success -> {
                        it.data?.let {movies ->
                            setState { copy(movieListState = MovieListContract.MovieListState.Success(
-                               movieList = movies
-                           )
+                               movieList = movies)
                            ) }
                        }
                    }

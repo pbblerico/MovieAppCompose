@@ -1,11 +1,14 @@
 package com.example.movieappcompose
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieappcompose.movieList.repository.MovieRepository
 import com.example.movieappcompose.mvi.UiEffect
 import com.example.movieappcompose.mvi.UiEvent
 import com.example.movieappcompose.mvi.UiState
+import com.example.movieappcompose.utils.Result
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,20 +21,16 @@ import kotlinx.coroutines.launch
 class FavouriteViewModelTest(
     private val repository: MovieRepository
 ): ViewModel() {
-    private val _uiState: MutableStateFlow<UiState> = MutableStateFlow(MovieListContract.State(MovieListContract.MovieListState.Empty))
+    private val _uiState: MutableStateFlow<MovieListContract.State> = MutableStateFlow(MovieListContract.State(MovieListContract.MovieListState.Empty))
     val uiState = _uiState.asStateFlow()
 
-    private val _event: MutableSharedFlow<UiEvent> = MutableSharedFlow()
+    private val _event: MutableSharedFlow<MovieListContract.Event> = MutableSharedFlow()
     val event = _event.asSharedFlow()
 
-    private val _effect: Channel<UiEffect> = Channel()
+    private val _effect: Channel<MovieListContract.Effect> = Channel()
     val effect = _effect.receiveAsFlow()
 
-    init {
-        subscribeEvents()
-    }
-
-    private fun subscribeEvents() {
+    fun subscribeEvents() {
         viewModelScope.launch {
             event.collectLatest {event ->
                 handleEvent(event)
@@ -39,34 +38,61 @@ class FavouriteViewModelTest(
         }
     }
 
-    fun handleEvent(event: UiEvent) {
+    private fun handleEvent(event: UiEvent) {
         when(event) {
             is MovieListContract.Event.ShowMovieList -> {
-
+                getFavouriteList()
             }
             is MovieListContract.Event.OnMovieClicked -> {
-//                setEffect { MovieListContract.Effect.NavigateToDetails(event.id) }
+                setEffect { MovieListContract.Effect.NavigateToDetails(event.id) }
             }
             is MovieListContract.Event.OnIconButtonClicked -> {
-//                event.data.let { movie ->
-//                    setEffect { MovieListContract.Effect.OnIconButtonClick(movie, event.remove) }
-////                    getFavouriteList()
-//                }
+                event.data.let { movie ->
+                    setEffect { MovieListContract.Effect.OnIconButtonClick(movie, event.remove) }
+                }
             }
             else -> Unit
         }
     }
 
-    fun setEvent(event: UiEvent) {
+    fun removeFromFavourite(id: String) {
+        viewModelScope.launch(Dispatchers.Main) {
+            repository.removeFromFavourite(id) {}
+        }
+    }
+
+    private fun getFavouriteList() {
+        setState { copy(movieListState = MovieListContract.MovieListState.Loading) }
+        viewModelScope.launch {
+            repository.getFavouritesList().collect {
+                when(it) {
+                    is Result.Success -> {
+                        it.data?.let {movies ->
+                            setState { copy(movieListState = MovieListContract.MovieListState.Success(
+                                movieList = movies)
+                            ) }
+                        }
+                    }
+                    else -> {
+                        setState { copy(movieListState = MovieListContract.MovieListState.Empty) }
+                        Log.d("asd", it.toString())
+                    }
+                }
+            }
+        }
+    }
+
+    fun setEvent(event: MovieListContract.Event) {
         val newEvent = event
         viewModelScope.launch { _event.emit(newEvent) }
     }
 
-    fun setState(newState: UiState) {
-
+    fun setState(reduce: MovieListContract.State.() -> MovieListContract.State) {
+        val newState = uiState.value.reduce()
+        _uiState.value = newState
     }
 
-    fun setEffect() {
-
+    fun setEffect(builder: () -> MovieListContract.Effect) {
+        viewModelScope.launch { _effect.send(builder()) }
     }
 }
